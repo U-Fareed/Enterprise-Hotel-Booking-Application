@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
-  <NonVisualComponents>
-    <Component class="javax.swing.JLabel" name="room_number_label">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Enter Room Number"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="room_number">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
-    </Component>
-  </NonVisualComponents>
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -36,38 +24,48 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="deleteRoomBtn" min="-2" max="-2" attributes="0"/>
+                  <Component id="deleteEmployeeBtn" min="-2" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="addRoomBtn" min="-2" max="-2" attributes="0"/>
+                      <Component id="addEmployeeBtn" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="updateRoomBtn" min="-2" max="-2" attributes="0"/>
+                      <Component id="updateEmployeeBtn" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" min="-2" pref="544" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jScrollPane1" min="-2" pref="388" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace pref="33" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="275" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="updateRoomBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="addRoomBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="updateEmployeeBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addEmployeeBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="deleteRoomBtn" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="11" max="32767" attributes="0"/>
+              <Component id="deleteEmployeeBtn" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="48" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Staff controls"/>
+      </Properties>
+    </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -75,15 +73,15 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="roomOverview">
+        <Component class="javax.swing.JTable" name="employeeInfoTable">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="5" rowCount="4">
-                <Column editable="true" title="Room number" type="java.lang.Object"/>
-                <Column editable="true" title="Room capasity" type="java.lang.Object"/>
-                <Column editable="true" title="Room type" type="java.lang.Object"/>
-                <Column editable="true" title="Room status" type="java.lang.Object"/>
-                <Column editable="true" title="Rate" type="java.lang.Object"/>
+                <Column editable="true" title="EmpId" type="java.lang.Object"/>
+                <Column editable="true" title="Password" type="java.lang.Object"/>
+                <Column editable="true" title="Full name" type="java.lang.Object"/>
+                <Column editable="true" title="Role" type="java.lang.Object"/>
+                <Column editable="true" title="Active Status" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -122,22 +120,22 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="updateRoomBtn">
+    <Component class="javax.swing.JButton" name="updateEmployeeBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Update room"/>
+        <Property name="text" type="java.lang.String" value="Update Employee"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="addRoomBtn">
+    <Component class="javax.swing.JButton" name="addEmployeeBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Add room"/>
+        <Property name="text" type="java.lang.String" value="Add Employee"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addRoomBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addEmployeeBtnActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="deleteRoomBtn">
+    <Component class="javax.swing.JButton" name="deleteEmployeeBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Delete room"/>
+        <Property name="text" type="java.lang.String" value="Delete Employee"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -1,13 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package hotelmanagement.model;
 
-/**
- *
- * @author USER
- */
 public class Room {
-    
+    private int roomId;
+    private String roomNumber;
+    private String roomType;
+    private int capacity;
+    private double rate;
+    private String status;
+
+    public Room() {}
+
+    public int getRoomId() { return roomId; }
+    public void setRoomId(int roomId) { this.roomId = roomId; }
+    public String getRoomNumber() { return roomNumber; }
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+    public String getRoomType() { return roomType; }
+    public void setRoomType(String roomType) { this.roomType = roomType; }
+    public int getCapacity() { return capacity; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public double getRate() { return rate; }
+    public void setRate(double rate) { this.rate = rate; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

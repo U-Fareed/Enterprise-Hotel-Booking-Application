@@ -1,20 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package hotelmanagement;
 
-/**
- *
- * @author USER
- */
+import hotelmanagement.util.DBConnection;
+import java.sql.Connection;
+
 public class HotelManagement {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+
+        Connection connection = DBConnection.getInstance().getConnection();
+
+        if (connection != null) {
+            System.out.println("Database connection successful!");
+        } else {
+            System.out.println("Database connection failed!");
+        }
     }
-    
 }

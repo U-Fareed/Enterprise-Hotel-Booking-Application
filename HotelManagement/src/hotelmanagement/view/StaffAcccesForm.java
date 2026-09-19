@@ -8,14 +8,14 @@ package hotelmanagement.view;
  *
  * @author USER
  */
-public class LoginForm extends javax.swing.JFrame {
+public class StaffAcccesForm extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginForm.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffAcccesForm.class.getName());
 
     /**
-     * Creates new form LoginForm
+     * Creates new form StaffForm
      */
-    public LoginForm() {
+    public StaffAcccesForm() {
         initComponents();
     }
 
@@ -29,72 +29,84 @@ public class LoginForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        email = new javax.swing.JLabel();
+        usernameInput = new javax.swing.JTextField();
+        username = new javax.swing.JLabel();
         password = new javax.swing.JLabel();
         passwordInput = new javax.swing.JTextField();
-        usernameInput = new javax.swing.JTextField();
-        submitBtn = new javax.swing.JButton();
+        login = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Login Form");
+        jLabel1.setText("Please login to access staff controls");
 
-        email.setText("Username");
+        username.setText("Username");
 
         password.setText("Password");
 
         passwordInput.addActionListener(this::passwordInputActionPerformed);
 
-        submitBtn.setText("Submit");
-        submitBtn.addActionListener(this::submitBtnActionPerformed);
+        login.setText("Login");
+        login.addActionListener(this::loginActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(submitBtn)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(login))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(passwordInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usernameInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(91, 91, 91))
+                            .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(usernameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passwordInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(84, 84, 84))
             .addGroup(layout.createSequentialGroup()
-                .addGap(151, 151, 151)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(98, 98, 98)
+                .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(74, 74, 74)
                 .addComponent(jLabel1)
-                .addGap(39, 39, 39)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(email)
-                    .addComponent(usernameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(password))
-                .addGap(37, 37, 37)
-                .addComponent(submitBtn)
-                .addContainerGap(61, Short.MAX_VALUE))
+                    .addComponent(usernameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(username))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(password)
+                    .addComponent(passwordInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(login)
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
-        new DashboardFrame().setVisible(true);
-    }//GEN-LAST:event_submitBtnActionPerformed
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+        String username = usernameInput.getText().trim();
+        String password = passwordInput.getText().trim();
+
+    hotelmanagement.controller.StaffController sc = new hotelmanagement.controller.StaffController();
+    hotelmanagement.model.Staff staff = sc.authenticate(username, password);
+
+    if (staff != null) {
+        new StaffControls().setVisible(true);
+        this.dispose();
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "Invalid username or password.");
+    }
+    }//GEN-LAST:event_loginActionPerformed
 
     private void passwordInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordInputActionPerformed
         // TODO add your handling code here:
@@ -122,15 +134,15 @@ public class LoginForm extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new LoginForm().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new StaffAcccesForm().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel email;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton login;
     private javax.swing.JLabel password;
     private javax.swing.JTextField passwordInput;
-    private javax.swing.JButton submitBtn;
+    private javax.swing.JLabel username;
     private javax.swing.JTextField usernameInput;
     // End of variables declaration//GEN-END:variables
 }

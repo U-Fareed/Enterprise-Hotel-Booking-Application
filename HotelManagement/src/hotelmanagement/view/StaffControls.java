@@ -8,14 +8,14 @@ package hotelmanagement.view;
  *
  * @author USER
  */
-public class RoomForm extends javax.swing.JFrame {
+public class StaffControls extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RoomForm.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffControls.class.getName());
 
     /**
-     * Creates new form RoomForm
+     * Creates new form StaffControls
      */
-    public RoomForm() {
+    public StaffControls() {
         initComponents();
     }
 
@@ -28,21 +28,18 @@ public class RoomForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        room_number_label = new javax.swing.JLabel();
-        room_number = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        roomOverview = new javax.swing.JTable();
-        updateRoomBtn = new javax.swing.JButton();
-        addRoomBtn = new javax.swing.JButton();
-        deleteRoomBtn = new javax.swing.JButton();
-
-        room_number_label.setText("Enter Room Number");
-
-        room_number.setText("jTextField1");
+        employeeInfoTable = new javax.swing.JTable();
+        updateEmployeeBtn = new javax.swing.JButton();
+        addEmployeeBtn = new javax.swing.JButton();
+        deleteEmployeeBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        roomOverview.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel1.setText("Staff controls");
+
+        employeeInfoTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -50,53 +47,57 @@ public class RoomForm extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Room number", "Room capasity", "Room type", "Room status", "Rate"
+                "EmpId", "Password", "Full name", "Role", "Active Status"
             }
         ));
-        jScrollPane1.setViewportView(roomOverview);
+        jScrollPane1.setViewportView(employeeInfoTable);
 
-        updateRoomBtn.setText("Update room");
+        updateEmployeeBtn.setText("Update Employee");
 
-        addRoomBtn.setText("Add room");
-        addRoomBtn.addActionListener(this::addRoomBtnActionPerformed);
+        addEmployeeBtn.setText("Add Employee");
+        addEmployeeBtn.addActionListener(this::addEmployeeBtnActionPerformed);
 
-        deleteRoomBtn.setText("Delete room");
+        deleteEmployeeBtn.setText("Delete Employee");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(deleteRoomBtn)
+                    .addComponent(deleteEmployeeBtn)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addRoomBtn)
+                        .addComponent(addEmployeeBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(updateRoomBtn))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addComponent(updateEmployeeBtn))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(updateRoomBtn)
-                    .addComponent(addRoomBtn))
+                    .addComponent(updateEmployeeBtn)
+                    .addComponent(addEmployeeBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteRoomBtn)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addComponent(deleteEmployeeBtn)
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomBtnActionPerformed
-        new AddRoomForm().setVisible(true);
-    }//GEN-LAST:event_addRoomBtnActionPerformed
+    private void addEmployeeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addEmployeeBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,16 +121,15 @@ public class RoomForm extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new RoomForm().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new StaffControls().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addRoomBtn;
-    private javax.swing.JButton deleteRoomBtn;
+    private javax.swing.JButton addEmployeeBtn;
+    private javax.swing.JButton deleteEmployeeBtn;
+    private javax.swing.JTable employeeInfoTable;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable roomOverview;
-    private javax.swing.JTextField room_number;
-    private javax.swing.JLabel room_number_label;
-    private javax.swing.JButton updateRoomBtn;
+    private javax.swing.JButton updateEmployeeBtn;
     // End of variables declaration//GEN-END:variables
 }

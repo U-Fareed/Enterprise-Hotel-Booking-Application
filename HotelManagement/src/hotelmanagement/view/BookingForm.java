@@ -13,7 +13,7 @@ public class BookingForm extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookingForm.class.getName());
 
     /**
-     * Creates new form BookingForm
+     * Creates new form GuestForm
      */
     public BookingForm() {
         initComponents();

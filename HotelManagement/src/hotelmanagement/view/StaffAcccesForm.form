@@ -23,28 +23,30 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="email" max="32767" attributes="0"/>
-                  <Component id="password" pref="59" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace pref="94" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="submitBtn" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="login" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="passwordInput" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="usernameInput" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="username" alignment="0" min="-2" pref="67" max="-2" attributes="0"/>
+                          <Component id="password" alignment="0" min="-2" pref="67" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="99" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="usernameInput" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="passwordInput" min="-2" pref="71" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="151" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="75" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="98" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -52,21 +54,21 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="email" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="usernameInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="username" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="passwordInput" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="password" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="password" min="-2" max="-2" attributes="0"/>
+                  <Component id="passwordInput" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-              <Component id="submitBtn" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="61" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="login" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="85" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -74,10 +76,12 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Login Form"/>
+        <Property name="text" type="java.lang.String" value="Please login to access staff controls"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="email">
+    <Component class="javax.swing.JTextField" name="usernameInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="username">
       <Properties>
         <Property name="text" type="java.lang.String" value="Username"/>
       </Properties>
@@ -92,14 +96,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passwordInputActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="usernameInput">
-    </Component>
-    <Component class="javax.swing.JButton" name="submitBtn">
+    <Component class="javax.swing.JButton" name="login">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Submit"/>
+        <Property name="text" type="java.lang.String" value="Login"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submitBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

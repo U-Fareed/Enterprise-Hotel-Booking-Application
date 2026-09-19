@@ -28,21 +28,125 @@ public class DashboardFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenu1 = new javax.swing.JMenu();
+        dashboard = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dashboardTable = new javax.swing.JTable();
+        revanue = new javax.swing.JLabel();
+        revanueDisplay = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        rooms = new javax.swing.JMenuItem();
+        booking = new javax.swing.JMenuItem();
+        guests = new javax.swing.JMenuItem();
+        staff = new javax.swing.JMenuItem();
+        payments = new javax.swing.JMenuItem();
+
+        jMenu1.setText("jMenu1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        dashboard.setText("Dashbaord");
+
+        dashboardTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Arrivals", "Depatures", "RoomStatus"
+            }
+        ));
+        jScrollPane1.setViewportView(dashboardTable);
+
+        revanue.setText("Revanue");
+
+        revanueDisplay.addActionListener(this::revanueDisplayActionPerformed);
+
+        jMenu2.setText("Home");
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Quick Controls");
+
+        rooms.setText("Rooms");
+        rooms.addActionListener(this::roomsActionPerformed);
+        jMenu3.add(rooms);
+
+        booking.setText("Booking");
+        booking.addActionListener(this::bookingActionPerformed);
+        jMenu3.add(booking);
+
+        guests.setText("Guests");
+        guests.addActionListener(this::guestsActionPerformed);
+        jMenu3.add(guests);
+
+        staff.setText("Staff");
+        staff.addActionListener(this::staffActionPerformed);
+        jMenu3.add(staff);
+
+        payments.setText("Payments");
+        jMenu3.add(payments);
+
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(revanue, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(revanueDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(dashboard)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(revanue)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(revanueDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookingActionPerformed
+        new GuestForm().setVisible(true); 
+    }//GEN-LAST:event_bookingActionPerformed
+
+    private void revanueDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_revanueDisplayActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_revanueDisplayActionPerformed
+
+    private void roomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomsActionPerformed
+        new RoomForm().setVisible(true);
+    }//GEN-LAST:event_roomsActionPerformed
+
+    private void guestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guestsActionPerformed
+        new GuestForm().setVisible(true);
+    }//GEN-LAST:event_guestsActionPerformed
+
+    private void staffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffActionPerformed
+        new StaffAcccesForm().setVisible(true);
+    }//GEN-LAST:event_staffActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +174,19 @@ public class DashboardFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem booking;
+    private javax.swing.JLabel dashboard;
+    private javax.swing.JTable dashboardTable;
+    private javax.swing.JMenuItem guests;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem payments;
+    private javax.swing.JLabel revanue;
+    private javax.swing.JTextField revanueDisplay;
+    private javax.swing.JMenuItem rooms;
+    private javax.swing.JMenuItem staff;
     // End of variables declaration//GEN-END:variables
 }
