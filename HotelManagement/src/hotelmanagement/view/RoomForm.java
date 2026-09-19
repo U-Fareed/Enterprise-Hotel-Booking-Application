@@ -96,6 +96,8 @@ public class RoomForm extends javax.swing.JFrame {
 
     private void addRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomBtnActionPerformed
         new AddRoomForm().setVisible(true);
+        this.dispose();
+        new SuccessMessage().setVisible(true);
     }//GEN-LAST:event_addRoomBtnActionPerformed
 
     /**

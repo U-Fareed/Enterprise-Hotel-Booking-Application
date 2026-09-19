@@ -94,6 +94,7 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
         new DashboardFrame().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_submitBtnActionPerformed
 
     private void passwordInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordInputActionPerformed

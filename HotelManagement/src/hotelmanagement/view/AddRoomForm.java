@@ -120,7 +120,8 @@ public class AddRoomForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomBtnActionPerformed
-        // TODO add your handling code here:
+        new SuccessMessage().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_addRoomBtnActionPerformed
 
     private void roomRateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomRateInputActionPerformed

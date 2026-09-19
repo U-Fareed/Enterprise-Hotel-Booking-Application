@@ -168,7 +168,8 @@ public class GuestForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createBookingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBookingBtnActionPerformed
-        // TODO add your handling code here:
+        new SuccessMessage().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_createBookingBtnActionPerformed
 
     private void lastNameInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameInputActionPerformed

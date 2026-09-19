@@ -102,6 +102,7 @@ public class StaffAcccesForm extends javax.swing.JFrame {
 
     if (staff != null) {
         new StaffControls().setVisible(true);
+        new SuccessMessage().setVisible(true);
         this.dispose();
     } else {
         javax.swing.JOptionPane.showMessageDialog(this, "Invalid username or password.");

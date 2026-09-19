@@ -130,6 +130,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     private void bookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookingActionPerformed
         new GuestForm().setVisible(true); 
+        this.dispose();
     }//GEN-LAST:event_bookingActionPerformed
 
     private void revanueDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_revanueDisplayActionPerformed
@@ -138,14 +139,17 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     private void roomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomsActionPerformed
         new RoomForm().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_roomsActionPerformed
 
     private void guestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guestsActionPerformed
         new GuestForm().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_guestsActionPerformed
 
     private void staffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffActionPerformed
         new StaffAcccesForm().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_staffActionPerformed
 
     /**
