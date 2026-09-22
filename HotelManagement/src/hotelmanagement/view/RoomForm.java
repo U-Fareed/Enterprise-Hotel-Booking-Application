@@ -17,6 +17,8 @@ public class RoomForm extends javax.swing.JFrame {
      */
     public RoomForm() {
         initComponents();
+        loadRooms();
+
     }
 
     /**
@@ -97,7 +99,6 @@ public class RoomForm extends javax.swing.JFrame {
     private void addRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomBtnActionPerformed
         new AddRoomForm().setVisible(true);
         this.dispose();
-        new SuccessMessage().setVisible(true);
     }//GEN-LAST:event_addRoomBtnActionPerformed
 
     /**
@@ -124,6 +125,19 @@ public class RoomForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new RoomForm().setVisible(true));
     }
+    
+    private void loadRooms() {
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) roomOverview.getModel();
+    model.setRowCount(0);
+    for (hotelmanagement.model.Room r :
+            new hotelmanagement.controller.RoomController().getAllRooms()) {
+        model.addRow(new Object[]{
+            r.getRoomNumber(), r.getCapacity(), r.getRoomType(),
+            r.getStatus(), r.getRate()
+        });
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addRoomBtn;

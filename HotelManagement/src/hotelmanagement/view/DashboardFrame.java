@@ -17,6 +17,7 @@ public class DashboardFrame extends javax.swing.JFrame {
      */
     public DashboardFrame() {
         initComponents();
+        loadDashboard();
     }
 
     /**
@@ -176,6 +177,31 @@ public class DashboardFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new DashboardFrame().setVisible(true));
     }
+    
+    private void loadDashboard() {
+    hotelmanagement.controller.BookingController bc =
+        new hotelmanagement.controller.BookingController();
+
+    java.util.List<String> arrivals = bc.getTodaysArrivals();
+    java.util.List<String> departures = bc.getTodaysDepartures();
+
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) dashboardTable.getModel();
+    model.setRowCount(0);
+    int rows = Math.max(arrivals.size(), departures.size());
+    for (int i = 0; i < rows; i++) {
+        model.addRow(new Object[]{
+            i < arrivals.size() ? arrivals.get(i) : "",
+            i < departures.size() ? departures.get(i) : "",
+            ""
+        });
+    }
+
+    revanueDisplay.setText("Rs. " + bc.getTotalRevenue());
+    revanueDisplay.setEditable(false);
+    revanueDisplay.setBorder(null);
+    revanueDisplay.setBackground(getBackground());
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem booking;

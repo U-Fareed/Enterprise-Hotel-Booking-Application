@@ -168,8 +168,27 @@ public class GuestForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createBookingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBookingBtnActionPerformed
-        new SuccessMessage().setVisible(true);
-        this.dispose();
+        hotelmanagement.model.Guest g = new hotelmanagement.model.Guest();
+    g.setFirstName(firstNameInput.getText().trim());
+    g.setLastName(lastNameInput.getText().trim());
+    g.setNic(nicInput.getText().trim());
+    g.setPhone(phoneNumberInput.getText().trim());
+    g.setEmail(emailInput.getText().trim());
+    g.setAddress(addressInput.getText().trim());
+    g.setNationality(nationalityInput.getText().trim());
+
+    if (g.getFirstName().isEmpty() || g.getLastName().isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "First and last name required.");
+        return;
+    }
+
+    int id = new hotelmanagement.controller.GuestController().addGuest(g);
+    if (id > 0) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Guest saved (ID " + id + ")");
+        // TODO: open BookingForm passing guest id
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "Failed to save guest.");
+    }
     }//GEN-LAST:event_createBookingBtnActionPerformed
 
     private void lastNameInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameInputActionPerformed

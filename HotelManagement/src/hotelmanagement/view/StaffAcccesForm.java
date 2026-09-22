@@ -94,15 +94,16 @@ public class StaffAcccesForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-        String username = usernameInput.getText().trim();
-        String password = passwordInput.getText().trim();
+    String user = usernameInput.getText().trim();
+    String pass = passwordInput.getText().trim();
 
-    hotelmanagement.controller.StaffController sc = new hotelmanagement.controller.StaffController();
-    hotelmanagement.model.Staff staff = sc.authenticate(username, password);
+    hotelmanagement.controller.StaffController sc =
+        new hotelmanagement.controller.StaffController();
+    hotelmanagement.model.Staff staff = sc.authenticate(user, pass);
 
     if (staff != null) {
+        hotelmanagement.util.Session.setCurrentStaff(staff);
         new StaffControls().setVisible(true);
-        new SuccessMessage().setVisible(true);
         this.dispose();
     } else {
         javax.swing.JOptionPane.showMessageDialog(this, "Invalid username or password.");

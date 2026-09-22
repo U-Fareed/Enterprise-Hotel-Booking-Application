@@ -38,6 +38,8 @@ public class AddRoomForm extends javax.swing.JFrame {
         roomRateInput = new javax.swing.JTextField();
         roomCapasityInput = new javax.swing.JTextField();
         addRoomBtn = new javax.swing.JToggleButton();
+        roomType1 = new javax.swing.JLabel();
+        roomNumberInput = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,6 +58,8 @@ public class AddRoomForm extends javax.swing.JFrame {
         addRoomBtn.setText("Add room");
         addRoomBtn.addActionListener(this::addRoomBtnActionPerformed);
 
+        roomType1.setText("Room Type");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,9 +73,13 @@ public class AddRoomForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addRoomBtn))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(roomType1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(roomNumberInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(rate, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -95,7 +103,11 @@ public class AddRoomForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(roomType1)
+                    .addComponent(roomNumberInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(roomType)
                     .addComponent(roomTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -111,17 +123,39 @@ public class AddRoomForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rate)
                     .addComponent(roomRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
+                .addGap(22, 22, 22)
                 .addComponent(addRoomBtn)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void addRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomBtnActionPerformed
-        new SuccessMessage().setVisible(true);
-        this.dispose();
+            try {
+        hotelmanagement.model.Room r = new hotelmanagement.model.Room();
+        r.setRoomNumber(roomNumberInput.getText().trim());   // NOTE: add this field!
+        r.setRoomType(roomTypeInput.getText().trim());
+        r.setCapacity(Integer.parseInt(roomCapasityInput.getText().trim()));
+        r.setRate(Double.parseDouble(roomRateInput.getText().trim()));
+        r.setStatus(roomStatusInput.getText().trim().toUpperCase());
+
+        if (r.getRoomNumber().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Enter a room number.");
+            return;
+        }
+
+        boolean ok = new hotelmanagement.controller.RoomController().addRoom(r);
+        if (ok) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Room added.");
+            new RoomForm().setVisible(true);
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Failed to add room.");
+        }
+    } catch (NumberFormatException ex) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Capacity and rate must be numbers.");
+    }
     }//GEN-LAST:event_addRoomBtnActionPerformed
 
     private void roomRateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomRateInputActionPerformed
@@ -159,9 +193,11 @@ public class AddRoomForm extends javax.swing.JFrame {
     private javax.swing.JLabel rate;
     private javax.swing.JLabel roomCapasity;
     private javax.swing.JTextField roomCapasityInput;
+    private javax.swing.JTextField roomNumberInput;
     private javax.swing.JTextField roomRateInput;
     private javax.swing.JTextField roomStatusInput;
     private javax.swing.JLabel roomType;
+    private javax.swing.JLabel roomType1;
     private javax.swing.JTextField roomTypeInput;
     private javax.swing.JLabel status;
     // End of variables declaration//GEN-END:variables

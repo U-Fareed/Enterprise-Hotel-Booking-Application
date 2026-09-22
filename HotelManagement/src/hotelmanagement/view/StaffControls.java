@@ -17,6 +17,8 @@ public class StaffControls extends javax.swing.JFrame {
      */
     public StaffControls() {
         initComponents();
+        loadStaff();
+
     }
 
     /**
@@ -124,6 +126,18 @@ public class StaffControls extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new StaffControls().setVisible(true));
     }
 
+    private void loadStaff() {
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) employeeInfoTable.getModel();
+    model.setRowCount(0);
+    for (hotelmanagement.model.Staff s :
+            new hotelmanagement.controller.StaffController().getAllStaff()) {
+        model.addRow(new Object[]{
+            s.getStaffId(), s.getPassword(), s.getFullName(),
+            s.getRole(), s.isActive()
+        });
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmployeeBtn;
     private javax.swing.JButton deleteEmployeeBtn;
