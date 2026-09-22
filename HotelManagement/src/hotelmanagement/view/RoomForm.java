@@ -17,9 +17,10 @@ public class RoomForm extends javax.swing.JFrame {
      */
     public RoomForm() {
         initComponents();
+        setLocationRelativeTo(null);
         loadRooms();
-
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,11 +59,13 @@ public class RoomForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(roomOverview);
 
         updateRoomBtn.setText("Update room");
+        updateRoomBtn.addActionListener(this::updateRoomBtnActionPerformed);
 
         addRoomBtn.setText("Add room");
         addRoomBtn.addActionListener(this::addRoomBtnActionPerformed);
 
         deleteRoomBtn.setText("Delete room");
+        deleteRoomBtn.addActionListener(this::deleteRoomBtnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,6 +103,61 @@ public class RoomForm extends javax.swing.JFrame {
         new AddRoomForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_addRoomBtnActionPerformed
+
+    private void deleteRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRoomBtnActionPerformed
+ int row = roomOverview.getSelectedRow();
+        if (row == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Select a room first.");
+            return;
+        }
+
+        String roomNumber = roomOverview.getValueAt(row, 0).toString();
+
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+                "Delete room " + roomNumber + "?", "Confirm",
+                javax.swing.JOptionPane.YES_NO_OPTION);
+        if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+        hotelmanagement.controller.RoomController rc =
+                new hotelmanagement.controller.RoomController();
+        hotelmanagement.model.Room r = rc.getRoomByNumber(roomNumber);
+
+        if (r == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Room not found.");
+            return;
+        }
+
+        boolean ok = rc.deleteRoom(r.getRoomId());
+        if (ok) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Room deleted.");
+            loadRooms();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Cannot delete — this room may have bookings.");
+        }
+    }//GEN-LAST:event_deleteRoomBtnActionPerformed
+
+    private void updateRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateRoomBtnActionPerformed
+        int row = roomOverview.getSelectedRow();
+        if (row == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Select a room first.");
+            return;
+        }
+
+        String roomNumber = roomOverview.getValueAt(row, 0).toString();
+        hotelmanagement.model.Room r =
+                new hotelmanagement.controller.RoomController().getRoomByNumber(roomNumber);
+
+        if (r == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Room not found.");
+            return;
+        }
+
+        AddRoomForm form = new AddRoomForm();
+        form.loadRoomForEdit(r);
+        form.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_updateRoomBtnActionPerformed
 
     /**
      * @param args the command line arguments

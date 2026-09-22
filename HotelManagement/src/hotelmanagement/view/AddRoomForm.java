@@ -10,6 +10,19 @@ package hotelmanagement.view;
  */
 public class AddRoomForm extends javax.swing.JFrame {
     
+    private hotelmanagement.model.Room editingRoom = null;
+
+        public void loadRoomForEdit(hotelmanagement.model.Room r) {
+        this.editingRoom = r;
+        roomNumberInput.setText(r.getRoomNumber());
+        roomTypeInput.setSelectedItem(r.getRoomType());
+        roomCapasityInput.setText(String.valueOf(r.getCapacity()));
+        roomRateInput.setText(String.valueOf(r.getRate()));
+        roomStatusInput.setSelectedItem(r.getStatus());
+        addRoomBtn.setText("Update room");
+        jLabel1.setText("Update room");
+    }
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddRoomForm.class.getName());
 
     /**
@@ -17,8 +30,8 @@ public class AddRoomForm extends javax.swing.JFrame {
      */
     public AddRoomForm() {
         initComponents();
+        setLocationRelativeTo(null);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,13 +46,13 @@ public class AddRoomForm extends javax.swing.JFrame {
         roomCapasity = new javax.swing.JLabel();
         status = new javax.swing.JLabel();
         rate = new javax.swing.JLabel();
-        roomStatusInput = new javax.swing.JTextField();
-        roomTypeInput = new javax.swing.JTextField();
         roomRateInput = new javax.swing.JTextField();
         roomCapasityInput = new javax.swing.JTextField();
         addRoomBtn = new javax.swing.JToggleButton();
         roomType1 = new javax.swing.JLabel();
         roomNumberInput = new javax.swing.JTextField();
+        roomTypeInput = new javax.swing.JComboBox<>();
+        roomStatusInput = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,7 +71,12 @@ public class AddRoomForm extends javax.swing.JFrame {
         addRoomBtn.setText("Add room");
         addRoomBtn.addActionListener(this::addRoomBtnActionPerformed);
 
-        roomType1.setText("Room Type");
+        roomType1.setText("Room Number");
+
+        roomTypeInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Standard", "Deluxe", "Suite" }));
+        roomTypeInput.addActionListener(this::roomTypeInputActionPerformed);
+
+        roomStatusInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OCCUPIED", "MAINTENANCE", "CLEANING" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,31 +90,32 @@ public class AddRoomForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addRoomBtn))
+                        .addComponent(addRoomBtn)
+                        .addGap(1, 1, 1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(roomType1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(roomType1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                                 .addComponent(roomNumberInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(rate, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(roomRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(roomType, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(roomTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(roomStatusInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(roomCapasity)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-                                .addComponent(roomCapasityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(60, 60, 60))
+                                .addComponent(roomStatusInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(roomCapasity)
+                                    .addComponent(roomType, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(roomTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(roomCapasityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(59, 59, 59))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,35 +151,68 @@ public class AddRoomForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomBtnActionPerformed
-            try {
-        hotelmanagement.model.Room r = new hotelmanagement.model.Room();
-        r.setRoomNumber(roomNumberInput.getText().trim());   // NOTE: add this field!
-        r.setRoomType(roomTypeInput.getText().trim());
-        r.setCapacity(Integer.parseInt(roomCapasityInput.getText().trim()));
-        r.setRate(Double.parseDouble(roomRateInput.getText().trim()));
-        r.setStatus(roomStatusInput.getText().trim().toUpperCase());
+    try {
+            String roomNo = roomNumberInput.getText().trim();
+            String type   = roomTypeInput.getSelectedItem().toString();
+            String capStr = roomCapasityInput.getText().trim();
+            String rateStr = roomRateInput.getText().trim();
+            String status = roomStatusInput.getSelectedItem().toString();
 
-        if (r.getRoomNumber().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Enter a room number.");
-            return;
-        }
+            if (roomNo.isEmpty() || capStr.isEmpty() || rateStr.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+                return;
+            }
 
-        boolean ok = new hotelmanagement.controller.RoomController().addRoom(r);
-        if (ok) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Room added.");
-            new RoomForm().setVisible(true);
-            this.dispose();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Failed to add room.");
+            int capacity = Integer.parseInt(capStr);
+            double rateVal = Double.parseDouble(rateStr);
+
+            if (capacity <= 0 || rateVal <= 0) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Capacity and rate must be positive numbers.");
+                return;
+            }
+
+            hotelmanagement.model.Room r = new hotelmanagement.model.Room();
+            r.setRoomNumber(roomNo);
+            r.setRoomType(type);
+            r.setCapacity(capacity);
+            r.setRate(rateVal);
+            r.setStatus(status);
+
+            hotelmanagement.controller.RoomController rc =
+                    new hotelmanagement.controller.RoomController();
+
+            boolean ok;
+            if (editingRoom != null) {
+                r.setRoomId(editingRoom.getRoomId());
+                ok = rc.updateRoom(r);
+            } else {
+                ok = rc.addRoom(r);
+            }
+
+            if (ok) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        editingRoom != null ? "Room updated." : "Room added.");
+                new RoomForm().setVisible(true);
+                this.dispose();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Failed. Room number may already exist.");
+            }
+
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Capacity and rate must be numbers.");
         }
-    } catch (NumberFormatException ex) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Capacity and rate must be numbers.");
-    }
     }//GEN-LAST:event_addRoomBtnActionPerformed
 
     private void roomRateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomRateInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_roomRateInputActionPerformed
+
+    private void roomTypeInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomTypeInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_roomTypeInputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -195,10 +247,10 @@ public class AddRoomForm extends javax.swing.JFrame {
     private javax.swing.JTextField roomCapasityInput;
     private javax.swing.JTextField roomNumberInput;
     private javax.swing.JTextField roomRateInput;
-    private javax.swing.JTextField roomStatusInput;
+    private javax.swing.JComboBox<String> roomStatusInput;
     private javax.swing.JLabel roomType;
     private javax.swing.JLabel roomType1;
-    private javax.swing.JTextField roomTypeInput;
+    private javax.swing.JComboBox<String> roomTypeInput;
     private javax.swing.JLabel status;
     // End of variables declaration//GEN-END:variables
 }

@@ -126,6 +126,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Update room"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateRoomBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="addRoomBtn">
       <Properties>
@@ -139,6 +142,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete room"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteRoomBtnActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
