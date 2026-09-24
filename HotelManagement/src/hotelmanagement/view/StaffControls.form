@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -124,6 +124,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Update Employee"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateEmployeeBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="addEmployeeBtn">
       <Properties>
@@ -137,6 +140,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete Employee"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteEmployeeBtnActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

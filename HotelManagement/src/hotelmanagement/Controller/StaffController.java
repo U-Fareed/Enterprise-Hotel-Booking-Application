@@ -78,4 +78,57 @@ public class StaffController {
         s.setActive(rs.getBoolean("is_active"));
         return s;
     }
+    
+    public static class StaffResult {
+    public final boolean success;
+    public final String message;
+    public StaffResult(boolean success, String message) {
+        this.success = success; this.message = message;
+    }
+}
+
+public StaffResult saveStaff(Integer staffId, String user, String pass,
+                             String name, String role, boolean active) {
+    user = user == null ? "" : user.trim();
+    pass = pass == null ? "" : pass.trim();
+    name = name == null ? "" : name.trim();
+
+    if (user.isEmpty() || pass.isEmpty() || name.isEmpty())
+        return new StaffResult(false, "All fields are required.");
+    if (user.length() < 3)
+        return new StaffResult(false, "Username must be at least 3 characters.");
+    if (pass.length() < 4)
+        return new StaffResult(false, "Password must be at least 4 characters.");
+
+    Staff s = new Staff();
+    s.setUsername(user);
+    s.setPassword(pass);
+    s.setFullName(name);
+    s.setRole(role);
+    s.setActive(active);
+
+    boolean ok;
+    if (staffId != null) {
+        s.setStaffId(staffId);
+        ok = updateStaff(s);
+    } else {
+        ok = addStaff(s);
+    }
+    return ok
+        ? new StaffResult(true, staffId != null ? "Staff updated." : "Staff added.")
+        : new StaffResult(false, "Failed. Username may already exist.");
+}
+
+public Staff findByFullName(String fullName) {
+    String sql = "SELECT * FROM staff WHERE full_name = ?";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, fullName);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return mapRow(rs);
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return null;
+}
+
 }

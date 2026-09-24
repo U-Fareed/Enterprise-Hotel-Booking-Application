@@ -15,10 +15,52 @@ public class DashboardFrame extends javax.swing.JFrame {
     /**
      * Creates new form DashboardFrame
      */
-    public DashboardFrame() {
-        initComponents();
-        loadDashboard();
+public DashboardFrame() {
+    initComponents();
+    applyRbac();
+    loadDashboard();
+}
+
+private void applyRbac() {
+    hotelmanagement.model.Staff current =
+            hotelmanagement.util.Session.getCurrentStaff();
+    if (current == null) return;
+
+    String role = current.getRole();
+
+    if (!"ADMIN".equals(role)) {
+        staff.setVisible(false);
     }
+    if (!"ADMIN".equals(role) && !"MANAGER".equals(role)) {
+        revanue.setVisible(false);
+        revanueDisplay.setVisible(false);
+    }
+
+    setTitle("Dashboard - " + current.getFullName() + " (" + role + ")");
+}
+
+private void loadDashboard() {
+    hotelmanagement.controller.BookingController bc =
+            new hotelmanagement.controller.BookingController();
+
+    java.util.List<String> arrivals   = bc.getUpcomingArrivals();
+    java.util.List<String> departures = bc.getRecentDepartures();
+
+    javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) dashboardTable.getModel();
+    model.setRowCount(0);
+    int rows = Math.max(arrivals.size(), departures.size());
+    for (int i = 0; i < rows; i++) {
+        model.addRow(new Object[]{
+            i < arrivals.size()   ? arrivals.get(i)   : "",
+            i < departures.size() ? departures.get(i) : "",
+            ""
+        });
+    }
+
+    revanueDisplay.setText("Rs. " + bc.getTotalRevenue());
+    revanueDisplay.setEditable(false);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -193,31 +235,6 @@ public class DashboardFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new DashboardFrame().setVisible(true));
     }
-    
-    private void loadDashboard() {
-    hotelmanagement.controller.BookingController bc =
-        new hotelmanagement.controller.BookingController();
-
-    java.util.List<String> arrivals = bc.getTodaysArrivals();
-    java.util.List<String> departures = bc.getTodaysDepartures();
-
-    javax.swing.table.DefaultTableModel model =
-        (javax.swing.table.DefaultTableModel) dashboardTable.getModel();
-    model.setRowCount(0);
-    int rows = Math.max(arrivals.size(), departures.size());
-    for (int i = 0; i < rows; i++) {
-        model.addRow(new Object[]{
-            i < arrivals.size() ? arrivals.get(i) : "",
-            i < departures.size() ? departures.get(i) : "",
-            ""
-        });
-    }
-
-    revanueDisplay.setText("Rs. " + bc.getTotalRevenue());
-    revanueDisplay.setEditable(false);
-    revanueDisplay.setBorder(null);
-    revanueDisplay.setBackground(getBackground());
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem booking;

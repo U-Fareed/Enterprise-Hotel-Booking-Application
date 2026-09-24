@@ -147,6 +147,10 @@ private int nightsBetween() {
 
         jLabel9.setText("Children");
 
+        adultSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 30, 1));
+
+        childSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 30, 1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

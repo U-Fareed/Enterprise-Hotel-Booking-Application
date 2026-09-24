@@ -200,4 +200,46 @@ public BookingResult bookRoom(int guestId, int roomId,
         return new BookingResult(false, ex.getMessage(), -1);
     }
 }
+
+public java.util.List<Object[]> getRecentBookings() {
+    java.util.List<Object[]> rows = new java.util.ArrayList<>();
+    String sql = "SELECT b.booking_id, g.first_name, g.last_name, r.room_number, " +
+                 "b.check_in_date, b.check_out_date, b.status " +
+                 "FROM bookings b " +
+                 "JOIN guests g ON b.guest_id = g.guest_id " +
+                 "JOIN rooms  r ON b.room_id  = r.room_id " +
+                 "ORDER BY b.check_in_date DESC LIMIT 100";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         Statement st = conn.createStatement();
+         ResultSet rs = st.executeQuery(sql)) {
+        while (rs.next()) {
+            rows.add(new Object[]{
+                rs.getInt("booking_id"),
+                rs.getString("first_name") + " " + rs.getString("last_name"),
+                rs.getString("room_number"),
+                rs.getString("check_in_date"),
+                rs.getString("check_out_date"),
+                rs.getString("status")
+            });
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return rows;
+}
+
+public java.util.List<String> getUpcomingArrivals() {
+    return runNameQuery(
+        "SELECT g.first_name, g.last_name FROM bookings b " +
+        "JOIN guests g ON b.guest_id=g.guest_id " +
+        "WHERE b.check_in_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY) " +
+        "AND b.status='CONFIRMED' ORDER BY b.check_in_date");
+}
+
+public java.util.List<String> getRecentDepartures() {
+    return runNameQuery(
+        "SELECT g.first_name, g.last_name FROM bookings b " +
+        "JOIN guests g ON b.guest_id=g.guest_id " +
+        "WHERE b.check_out_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE() " +
+        "AND b.status='CHECKED_IN' ORDER BY b.check_out_date");
+}
+
 }

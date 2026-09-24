@@ -55,11 +55,13 @@ public class StaffControls extends javax.swing.JFrame {
         jScrollPane1.setViewportView(employeeInfoTable);
 
         updateEmployeeBtn.setText("Update Employee");
+        updateEmployeeBtn.addActionListener(this::updateEmployeeBtnActionPerformed);
 
         addEmployeeBtn.setText("Add Employee");
         addEmployeeBtn.addActionListener(this::addEmployeeBtnActionPerformed);
 
         deleteEmployeeBtn.setText("Delete Employee");
+        deleteEmployeeBtn.addActionListener(this::deleteEmployeeBtnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,8 +100,47 @@ public class StaffControls extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addEmployeeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeBtnActionPerformed
-        this.dispose();
+    new AddStaffForm().setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_addEmployeeBtnActionPerformed
+
+    private void updateEmployeeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateEmployeeBtnActionPerformed
+int row = employeeInfoTable.getSelectedRow();
+    if (row == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Select a staff member first.");
+        return;
+    }
+    // staff_id is hidden — store it as first column or fetch by username
+    String fullName = employeeInfoTable.getValueAt(row, 2).toString();
+    hotelmanagement.model.Staff s = new hotelmanagement.controller.StaffController()
+            .findByFullName(fullName);
+    if (s == null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Staff not found.");
+        return;
+    }
+    AddStaffForm form = new AddStaffForm();
+    form.loadStaffForEdit(s);
+    form.setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_updateEmployeeBtnActionPerformed
+
+    private void deleteEmployeeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEmployeeBtnActionPerformed
+int row = employeeInfoTable.getSelectedRow();
+    if (row == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Select a staff member first.");
+        return;
+    }
+    int staffId = (int) employeeInfoTable.getValueAt(row, 0);
+    int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "Delete staff #" + staffId + "?", "Confirm",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+    if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+    boolean ok = new hotelmanagement.controller.StaffController().deleteStaff(staffId);
+    javax.swing.JOptionPane.showMessageDialog(this,
+            ok ? "Deleted." : "Cannot delete — this staff may have references.");
+    if (ok) loadStaff();
+    }//GEN-LAST:event_deleteEmployeeBtnActionPerformed
 
     /**
      * @param args the command line arguments

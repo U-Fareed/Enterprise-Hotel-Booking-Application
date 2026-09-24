@@ -11,15 +11,12 @@ package hotelmanagement.view;
 public class AddRoomForm extends javax.swing.JFrame {
     
     private hotelmanagement.model.Room editingRoom = null;
-
-public void loadRoomForEdit(hotelmanagement.model.Room r) {
+    
+    public void loadRoomForEdit(hotelmanagement.model.Room r) {
     this.editingRoom = r;
     roomNumberInput.setText(r.getRoomNumber());
     roomTypeInput.setSelectedItem(r.getRoomType());
-    String t = r.getRoomType();
-    if (t.equals("Standard") || t.equals("Deluxe") || t.equals("Suite")) {
-        roomTypeInput.setSelectedItem(t);
-    }
+    roomCapasityInput.setText(String.valueOf(r.getCapacity()));
     roomAdultRateInput.setText(String.valueOf(r.getAdultRate()));
     roomChildRateInput.setText(String.valueOf(r.getChildRate()));
     roomStatusInput.setSelectedItem(r.getStatus());

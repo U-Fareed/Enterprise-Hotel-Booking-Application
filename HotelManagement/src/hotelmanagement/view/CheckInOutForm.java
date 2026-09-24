@@ -21,9 +21,9 @@ public class CheckInOutForm extends javax.swing.JFrame {
         loadBookings();
     }
 
-    private void loadBookings() {
+private void loadBookings() {
     rowData = new hotelmanagement.controller.BookingController()
-            .getBookingsForDate(java.time.LocalDate.now().toString());
+            .getRecentBookings();   // new method
 
     javax.swing.table.DefaultTableModel model =
             (javax.swing.table.DefaultTableModel) checkinTable.getModel();
