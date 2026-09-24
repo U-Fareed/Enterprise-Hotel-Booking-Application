@@ -20,13 +20,12 @@ public class DBConnection {
         }
     }
 
-    public static DBConnection getInstance() {
+    public static synchronized DBConnection getInstance() {
         if (instance == null) {
             instance = new DBConnection();
         }
         return instance;
     }
-
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {

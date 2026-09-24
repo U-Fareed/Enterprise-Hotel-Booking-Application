@@ -25,4 +25,26 @@ public class GuestController {
         } catch (SQLException e) { e.printStackTrace(); }
         return -1;
     }
+    
+        public java.util.List<hotelmanagement.model.Guest> getAllGuests() {
+        java.util.List<hotelmanagement.model.Guest> list = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM guests ORDER BY first_name, last_name";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                hotelmanagement.model.Guest g = new hotelmanagement.model.Guest();
+                g.setGuestId(rs.getInt("guest_id"));
+                g.setFirstName(rs.getString("first_name"));
+                g.setLastName(rs.getString("last_name"));
+                g.setNic(rs.getString("nic_or_passport"));
+                g.setPhone(rs.getString("phone"));
+                g.setEmail(rs.getString("email"));
+                g.setAddress(rs.getString("address"));
+                g.setNationality(rs.getString("nationality"));
+                list.add(g);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
 }

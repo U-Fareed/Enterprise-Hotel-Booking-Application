@@ -12,13 +12,26 @@ public class CheckInOutForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CheckInOutForm.class.getName());
 
+    private java.util.List<Object[]> rowData;
     /**
      * Creates new form CheckInOutForm
      */
     public CheckInOutForm() {
         initComponents();
+        loadBookings();
     }
 
+    private void loadBookings() {
+    rowData = new hotelmanagement.controller.BookingController()
+            .getBookingsForDate(java.time.LocalDate.now().toString());
+
+    javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) checkinTable.getModel();
+    model.setRowCount(0);
+    for (Object[] row : rowData) {
+        model.addRow(new Object[]{ row[0], row[1], row[3], row[4], row[5] });
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,21 +41,124 @@ public class CheckInOutForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton3 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        checkinTable = new javax.swing.JTable();
+        checkinBtn = new javax.swing.JButton();
+        checkoutBtn = new javax.swing.JButton();
+        closeBtn = new javax.swing.JButton();
+
+        jButton3.setText("jButton1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Check-in/out Table");
+
+        checkinTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Guest ID", "Guest Name", "Check-in time", "Check-out time", "Paid Status"
+            }
+        ));
+        jScrollPane1.setViewportView(checkinTable);
+
+        checkinBtn.setText("Check-in");
+        checkinBtn.addActionListener(this::checkinBtnActionPerformed);
+
+        checkoutBtn.setText("Check-out");
+        checkoutBtn.addActionListener(this::checkoutBtnActionPerformed);
+
+        closeBtn.setText("Close");
+        closeBtn.addActionListener(this::closeBtnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(closeBtn)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(checkoutBtn)
+                            .addComponent(checkinBtn, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(204, 204, 204)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(24, 24, 24)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkinBtn)
+                    .addComponent(closeBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkoutBtn)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
+ int row = checkinTable.getSelectedRow();
+    if (row == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Select a booking first.");
+        return;
+    }
+
+    int bookingId = (int) checkinTable.getValueAt(row, 0);
+    boolean ok = new hotelmanagement.controller.BookingController()
+            .updateBookingStatus(bookingId, "CHECKED_IN");
+
+    if (ok) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Checked in.");
+        loadBookings();
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "Failed.");
+    }
+    }//GEN-LAST:event_checkinBtnActionPerformed
+
+    private void checkoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutBtnActionPerformed
+int row = checkinTable.getSelectedRow();
+    if (row == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Select a booking first.");
+        return;
+    }
+
+    int bookingId = (int) checkinTable.getValueAt(row, 0);
+    boolean ok = new hotelmanagement.controller.BookingController()
+            .updateBookingStatus(bookingId, "CHECKED_OUT");
+
+    if (ok) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Checked out.");
+        loadBookings();
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "Failed.");
+    }
+    }//GEN-LAST:event_checkoutBtnActionPerformed
+
+    private void closeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBtnActionPerformed
+    new DashboardFrame().setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_closeBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +186,12 @@ public class CheckInOutForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton checkinBtn;
+    private javax.swing.JTable checkinTable;
+    private javax.swing.JButton checkoutBtn;
+    private javax.swing.JButton closeBtn;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

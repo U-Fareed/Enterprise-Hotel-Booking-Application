@@ -38,6 +38,7 @@ public class RoomForm extends javax.swing.JFrame {
         updateRoomBtn = new javax.swing.JButton();
         addRoomBtn = new javax.swing.JButton();
         deleteRoomBtn = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
 
         room_number_label.setText("Enter Room Number");
 
@@ -67,6 +68,9 @@ public class RoomForm extends javax.swing.JFrame {
         deleteRoomBtn.setText("Delete room");
         deleteRoomBtn.addActionListener(this::deleteRoomBtnActionPerformed);
 
+        backBtn.setText("Back");
+        backBtn.addActionListener(this::backBtnActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -75,11 +79,14 @@ public class RoomForm extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(deleteRoomBtn)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(addRoomBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(updateRoomBtn))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(backBtn)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addRoomBtn)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(updateRoomBtn))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -90,7 +97,8 @@ public class RoomForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateRoomBtn)
-                    .addComponent(addRoomBtn))
+                    .addComponent(addRoomBtn)
+                    .addComponent(backBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteRoomBtn)
                 .addContainerGap(11, Short.MAX_VALUE))
@@ -159,6 +167,11 @@ public class RoomForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_updateRoomBtnActionPerformed
 
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    new DashboardFrame().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -199,6 +212,7 @@ public class RoomForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addRoomBtn;
+    private javax.swing.JButton backBtn;
     private javax.swing.JButton deleteRoomBtn;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable roomOverview;

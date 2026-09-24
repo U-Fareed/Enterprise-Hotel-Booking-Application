@@ -43,6 +43,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         guests = new javax.swing.JMenuItem();
         staff = new javax.swing.JMenuItem();
         payments = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -91,6 +92,10 @@ public class DashboardFrame extends javax.swing.JFrame {
         payments.setText("Payments");
         jMenu3.add(payments);
 
+        jMenuItem1.setText("Check-In/Out");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+        jMenu3.add(jMenuItem1);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -130,7 +135,7 @@ public class DashboardFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookingActionPerformed
-        new GuestForm().setVisible(true); 
+        new BookingForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_bookingActionPerformed
 
@@ -149,9 +154,14 @@ public class DashboardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_guestsActionPerformed
 
     private void staffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffActionPerformed
-        new StaffAcccesForm().setVisible(true);
-        this.dispose();
+    new StaffControls().setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_staffActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new CheckInOutForm().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,6 +222,7 @@ public class DashboardFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem payments;
     private javax.swing.JLabel revanue;

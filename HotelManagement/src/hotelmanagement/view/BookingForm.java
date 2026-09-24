@@ -12,13 +12,37 @@ public class BookingForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookingForm.class.getName());
 
+    private java.util.List<hotelmanagement.model.Guest> guestList;
+    private java.util.List<hotelmanagement.model.Room> roomList;
     /**
      * Creates new form GuestForm
      */
     public BookingForm() {
         initComponents();
+        setLocationRelativeTo(null);
+        loadGuests();
+        loadRooms();
     }
 
+        private void loadGuests() {
+        guestBox.removeAllItems();
+        guestList = new hotelmanagement.controller.GuestController().getAllGuests();
+        for (hotelmanagement.model.Guest g : guestList) {
+            guestBox.addItem(g.getGuestId() + " - " + g.getFirstName() + " " + g.getLastName());
+        }
+    }
+
+    private void loadRooms() {
+        roomBox.removeAllItems();
+        roomList = new hotelmanagement.controller.RoomController().getAllRooms();
+        for (hotelmanagement.model.Room r : roomList) {
+            if ("AVAILABLE".equalsIgnoreCase(r.getStatus())) {
+                roomBox.addItem(r.getRoomId() + " - " + r.getRoomNumber()
+                        + " (" + r.getRoomType() + " - Rs." + r.getRate() + ")");
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,21 +52,178 @@ public class BookingForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        createBtn = new javax.swing.JButton();
+        checkInInput = new javax.swing.JTextField();
+        checkOutInput = new javax.swing.JTextField();
+        totalInput = new javax.swing.JTextField();
+        guestBox = new javax.swing.JComboBox<>();
+        roomBox = new javax.swing.JComboBox<>();
+        paymentMethodBox = new javax.swing.JComboBox<>();
+        backBtn = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Booking form");
+
+        jLabel2.setText("Guest");
+
+        jLabel3.setText("Room");
+
+        jLabel4.setText("Check-in date");
+
+        jLabel5.setText("Check-out date");
+
+        jLabel6.setText("Total amount");
+
+        jLabel7.setText("Payment method");
+
+        createBtn.setText("Create Booking");
+        createBtn.addActionListener(this::createBtnActionPerformed);
+
+        checkInInput.setText("jTextField1");
+
+        checkOutInput.setText("jTextField1");
+
+        totalInput.setText("jTextField1");
+
+        roomBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
+        paymentMethodBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CASH", "CARD", "ONLINE" }));
+
+        backBtn.setText("Back");
+        backBtn.addActionListener(this::backBtnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(checkInInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(guestBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(checkOutInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(totalInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(roomBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(paymentMethodBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(backBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(createBtn)))
+                .addGap(83, 83, 83))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(147, 147, 147)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(jLabel1)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(guestBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(roomBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(checkInInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(checkOutInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(totalInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(paymentMethodBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createBtn)
+                    .addComponent(backBtn))
+                .addGap(47, 47, 47))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    new DashboardFrame().setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_backBtnActionPerformed
+
+    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
+    if (guestBox.getSelectedIndex() < 0 || roomBox.getSelectedIndex() < 0) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Select a guest and a room.");
+        return;
+    }
+
+    String in = checkInInput.getText().trim();
+    String out = checkOutInput.getText().trim();
+    String totalStr = totalInput.getText().trim();
+
+    if (in.isEmpty() || out.isEmpty() || totalStr.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Fill all fields.");
+        return;
+    }
+
+    double total;
+    try {
+        total = Double.parseDouble(totalStr);
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Total must be a number.");
+        return;
+    }
+
+    int guestId = guestList.get(guestBox.getSelectedIndex()).getGuestId();
+    int roomId = -1;
+    String sel = roomBox.getSelectedItem().toString();
+    for (hotelmanagement.model.Room r : roomList) {
+        if (sel.startsWith(r.getRoomId() + " - ")) { roomId = r.getRoomId(); break; }
+    }
+
+    String payment = paymentMethodBox.getSelectedItem().toString();
+
+    try {
+        int id = new hotelmanagement.controller.BookingController()
+                .createBooking(guestId, roomId, in, out, payment, total);
+        if (id > 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Booking created (ID " + id + ")");
+            new DashboardFrame().setVisible(true);
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Failed.");
+        }
+    } catch (hotelmanagement.exception.RoomNotAvailableException ex) {
+        javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage());
+    }
+    }//GEN-LAST:event_createBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +251,20 @@ public class BookingForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
+    private javax.swing.JTextField checkInInput;
+    private javax.swing.JTextField checkOutInput;
+    private javax.swing.JButton createBtn;
+    private javax.swing.JComboBox<String> guestBox;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JComboBox<String> paymentMethodBox;
+    private javax.swing.JComboBox<String> roomBox;
+    private javax.swing.JTextField totalInput;
     // End of variables declaration//GEN-END:variables
 }

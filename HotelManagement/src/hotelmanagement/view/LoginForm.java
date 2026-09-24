@@ -93,17 +93,11 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
-        String user = usernameInput.getText().trim();
+     String user = usernameInput.getText().trim();
     String pass = passwordInput.getText().trim();
 
-    if (user.isEmpty() || pass.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Please fill both fields.");
-        return;
-    }
-
-    hotelmanagement.controller.StaffController sc =
-        new hotelmanagement.controller.StaffController();
-    hotelmanagement.model.Staff staff = sc.authenticate(user, pass);
+    hotelmanagement.model.Staff staff =
+            new hotelmanagement.controller.StaffController().authenticate(user, pass);
 
     if (staff == null) {
         javax.swing.JOptionPane.showMessageDialog(this, "Invalid credentials.");

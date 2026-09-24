@@ -23,73 +23,43 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="130" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
           <Group type="102" alignment="1" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="createBookingBtn" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lastName" min="-2" pref="73" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="lastNameInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="firstName" min="-2" pref="73" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="firstNameInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="paymentMethod" min="-2" pref="106" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="paymentMethodInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="nic" min="-2" pref="125" max="-2" attributes="0"/>
-                              <EmptySpace pref="84" max="32767" attributes="0"/>
-                              <Component id="nicInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="phoneNumber" min="-2" pref="97" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="phoneNumberInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="email" min="-2" pref="37" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="emailInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="address" min="-2" pref="58" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="addressInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="nationality" min="-2" pref="66" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="nationalityInput" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
+              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="firstName" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
+                  <Component id="lastName" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
+                  <Component id="nic" alignment="0" min="-2" pref="125" max="-2" attributes="0"/>
+                  <Component id="phoneNumber" alignment="0" min="-2" pref="97" max="-2" attributes="0"/>
+                  <Component id="email" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="address" alignment="0" min="-2" pref="58" max="-2" attributes="0"/>
+                  <Component id="nationality" alignment="0" min="-2" pref="66" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="96" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="emailInput" pref="186" max="32767" attributes="0"/>
+                  <Component id="phoneNumberInput" max="32767" attributes="0"/>
+                  <Component id="nicInput" max="32767" attributes="0"/>
+                  <Component id="lastNameInput" max="32767" attributes="0"/>
+                  <Component id="firstNameInput" max="32767" attributes="0"/>
+                  <Component id="createBookingBtn" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="nationalityInput" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="180" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="firstName" min="-2" max="-2" attributes="0"/>
                   <Component id="firstNameInput" min="-2" max="-2" attributes="0"/>
@@ -115,23 +85,21 @@
                   <Component id="emailInput" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="address" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="addressInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="address" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="93" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="jScrollPane1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="nationality" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="nationalityInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="nationalityInput" min="-2" max="-2" attributes="0"/>
+                  <Component id="nationality" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="paymentMethod" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="paymentMethodInput" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="createBookingBtn" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -177,11 +145,6 @@
         <Property name="text" type="java.lang.String" value="Nationality"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="paymentMethod">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Payment method"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JTextField" name="firstNameInput">
     </Component>
     <Component class="javax.swing.JTextField" name="lastNameInput">
@@ -194,20 +157,34 @@
     <Component class="javax.swing.JTextField" name="phoneNumberInput">
     </Component>
     <Component class="javax.swing.JTextField" name="emailInput">
-    </Component>
-    <Component class="javax.swing.JTextField" name="addressInput">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="emailInputActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="nationalityInput">
     </Component>
-    <Component class="javax.swing.JTextField" name="paymentMethodInput">
-    </Component>
     <Component class="javax.swing.JButton" name="createBookingBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Create Booking"/>
+        <Property name="text" type="java.lang.String" value="Create Guest"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createBookingBtnActionPerformed"/>
       </Events>
     </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="addressInput">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>
