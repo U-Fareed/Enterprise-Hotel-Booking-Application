@@ -7,41 +7,45 @@ import java.sql.*;
 public class BookingController {
 
     public int createBooking(int guestId, int roomId, String checkIn, String checkOut,
-                              String paymentMethod, double totalAmount) throws RoomNotAvailableException {
+                          int numAdults, int numChildren,
+                          String paymentMethod, double totalAmount)
+        throws RoomNotAvailableException {
 
-        String checkSql = "SELECT COUNT(*) FROM bookings WHERE room_id=? AND status IN ('CONFIRMED','CHECKED_IN') " +
-                           "AND check_in_date < ? AND check_out_date > ?";
-        String insertSql = "INSERT INTO bookings (guest_id, room_id, check_in_date, check_out_date, payment_method, total_amount) " +
-                            "VALUES (?,?,?,?,?,?)";
+    String checkSql = "SELECT COUNT(*) FROM bookings WHERE room_id=? AND status IN ('CONFIRMED','CHECKED_IN') " +
+                       "AND check_in_date < ? AND check_out_date > ?";
+    String insertSql = "INSERT INTO bookings (guest_id, room_id, check_in_date, check_out_date, " +
+                       "num_adults, num_children, payment_method, total_amount) VALUES (?,?,?,?,?,?,?,?)";
 
-        try (Connection conn = DBConnection.getInstance().getConnection()) {
+    try (Connection conn = DBConnection.getInstance().getConnection()) {
 
-            try (PreparedStatement ps = conn.prepareStatement(checkSql)) {
-                ps.setInt(1, roomId);
-                ps.setString(2, checkOut);
-                ps.setString(3, checkIn);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) > 0) {
-                        throw new RoomNotAvailableException("This room is already booked for those dates.");
-                    }
+        try (PreparedStatement ps = conn.prepareStatement(checkSql)) {
+            ps.setInt(1, roomId);
+            ps.setString(2, checkOut);
+            ps.setString(3, checkIn);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new RoomNotAvailableException("This room is already booked for those dates.");
                 }
             }
+        }
 
-            try (PreparedStatement ps = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, guestId);
-                ps.setInt(2, roomId);
-                ps.setString(3, checkIn);
-                ps.setString(4, checkOut);
-                ps.setString(5, paymentMethod);
-                ps.setDouble(6, totalAmount);
-                ps.executeUpdate();
-                try (ResultSet keys = ps.getGeneratedKeys()) {
-                    if (keys.next()) return keys.getInt(1);
-                }
+        try (PreparedStatement ps = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, guestId);
+            ps.setInt(2, roomId);
+            ps.setString(3, checkIn);
+            ps.setString(4, checkOut);
+            ps.setInt(5, numAdults);
+            ps.setInt(6, numChildren);
+            ps.setString(7, paymentMethod);
+            ps.setDouble(8, totalAmount);
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) return keys.getInt(1);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
-        return -1;
-    }
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return -1;
+}
 
     public java.util.List<String> getTodaysArrivals() {
         return runNameQuery("SELECT g.first_name, g.last_name FROM bookings b JOIN guests g ON b.guest_id=g.guest_id " +
@@ -103,24 +107,25 @@ public class BookingController {
     }
 
     public java.util.List<hotelmanagement.model.Room> getAvailableRooms() {
-        java.util.List<hotelmanagement.model.Room> list = new java.util.ArrayList<>();
-        String sql = "SELECT * FROM rooms WHERE status='AVAILABLE' ORDER BY room_number";
-        try (Connection conn = DBConnection.getInstance().getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                hotelmanagement.model.Room r = new hotelmanagement.model.Room();
-                r.setRoomId(rs.getInt("room_id"));
-                r.setRoomNumber(rs.getString("room_number"));
-                r.setRoomType(rs.getString("room_type"));
-                r.setCapacity(rs.getInt("capacity"));
-                r.setRate(rs.getDouble("rate"));
-                r.setStatus(rs.getString("status"));
-                list.add(r);
-            }
-        } catch (SQLException e) { e.printStackTrace(); }
-        return list;
-    }
+    java.util.List<hotelmanagement.model.Room> list = new java.util.ArrayList<>();
+    String sql = "SELECT * FROM rooms WHERE status='AVAILABLE' ORDER BY room_number";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         Statement st = conn.createStatement();
+         ResultSet rs = st.executeQuery(sql)) {
+        while (rs.next()) {
+            hotelmanagement.model.Room r = new hotelmanagement.model.Room();
+            r.setRoomId(rs.getInt("room_id"));
+            r.setRoomNumber(rs.getString("room_number"));
+            r.setRoomType(rs.getString("room_type"));
+            r.setCapacity(rs.getInt("capacity"));
+            r.setAdultRate(rs.getDouble("adult_rate"));
+            r.setChildRate(rs.getDouble("child_rate"));
+            r.setStatus(rs.getString("status"));
+            list.add(r);
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return list;
+}
 
     public boolean setRoomStatus(int roomId, String status) {
         String sql = "UPDATE rooms SET status=? WHERE room_id=?";
@@ -141,4 +146,58 @@ public class BookingController {
         } catch (SQLException e) { e.printStackTrace(); }
         return names;
     }
+    public static class BookingResult {
+    public final boolean success;
+    public final String message;
+    public final int bookingId;
+    public BookingResult(boolean success, String message, int bookingId) {
+        this.success = success; this.message = message; this.bookingId = bookingId;
+    }
+}
+
+public double calculateTotal(int nights, int adults, int children,
+                             double adultRate, double childRate) {
+    if (nights <= 0 || adults < 1) return 0;
+    return nights * (adults * adultRate + children * childRate);
+}
+
+public BookingResult bookRoom(int guestId, int roomId,
+                              java.util.Date inDate, java.util.Date outDate,
+                              int adults, int children,
+                              String paymentMethod) {
+
+    if (inDate == null || outDate == null)
+        return new BookingResult(false, "Please pick both dates.", -1);
+    if (!outDate.after(inDate))
+        return new BookingResult(false, "Check-out must be after check-in.", -1);
+
+    hotelmanagement.model.Room room =
+            new RoomController().getRoomById(roomId);
+    if (room == null)
+        return new BookingResult(false, "Room not found.", -1);
+    if (adults + children > room.getCapacity())
+        return new BookingResult(false,
+                "Room capacity is " + room.getCapacity() +
+                ". You selected " + (adults + children) + ".", -1);
+
+    long diff = (outDate.getTime() - inDate.getTime()) / (1000L * 60 * 60 * 24);
+    int nights = (int) diff;
+    if (nights <= 0)
+        return new BookingResult(false, "Invalid date range.", -1);
+
+    double total = calculateTotal(nights, adults, children,
+            room.getAdultRate(), room.getChildRate());
+
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+    try {
+        int id = createBooking(guestId, roomId,
+                sdf.format(inDate), sdf.format(outDate),
+                adults, children, paymentMethod, total);
+        return id > 0
+            ? new BookingResult(true, "Booking created (ID " + id + ")", id)
+            : new BookingResult(false, "Failed to save booking.", -1);
+    } catch (RoomNotAvailableException ex) {
+        return new BookingResult(false, ex.getMessage(), -1);
+    }
+}
 }

@@ -5,7 +5,8 @@ public class Room {
     private String roomNumber;
     private String roomType;
     private int capacity;
-    private double rate;
+    private double adultRate;
+    private double childRate;
     private String status;
 
     public Room() {}
@@ -18,8 +19,10 @@ public class Room {
     public void setRoomType(String roomType) { this.roomType = roomType; }
     public int getCapacity() { return capacity; }
     public void setCapacity(int capacity) { this.capacity = capacity; }
-    public double getRate() { return rate; }
-    public void setRate(double rate) { this.rate = rate; }
+    public double getAdultRate() { return adultRate; }
+    public void setAdultRate(double adultRate) { this.adultRate = adultRate; }
+    public double getChildRate() { return childRate; }
+    public void setChildRate(double childRate) { this.childRate = childRate; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 }

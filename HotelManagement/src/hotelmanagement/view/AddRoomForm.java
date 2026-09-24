@@ -12,16 +12,17 @@ public class AddRoomForm extends javax.swing.JFrame {
     
     private hotelmanagement.model.Room editingRoom = null;
 
-        public void loadRoomForEdit(hotelmanagement.model.Room r) {
-        this.editingRoom = r;
-        roomNumberInput.setText(r.getRoomNumber());
-        roomTypeInput.setSelectedItem(r.getRoomType());
-        roomCapasityInput.setText(String.valueOf(r.getCapacity()));
-        roomRateInput.setText(String.valueOf(r.getRate()));
-        roomStatusInput.setSelectedItem(r.getStatus());
-        addRoomBtn.setText("Update room");
-        jLabel1.setText("Update room");
-    }
+public void loadRoomForEdit(hotelmanagement.model.Room r) {
+    this.editingRoom = r;
+    roomNumberInput.setText(r.getRoomNumber());
+    roomTypeInput.setSelectedItem(r.getRoomType());
+    roomCapasityInput.setText(String.valueOf(r.getCapacity()));
+    roomAdultRateInput.setText(String.valueOf(r.getAdultRate()));
+    roomChildRateInput.setText(String.valueOf(r.getChildRate()));
+    roomStatusInput.setSelectedItem(r.getStatus());
+    addRoomBtn.setText("Update room");
+    jLabel1.setText("Update room");
+}
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddRoomForm.class.getName());
 
@@ -46,13 +47,15 @@ public class AddRoomForm extends javax.swing.JFrame {
         roomCapasity = new javax.swing.JLabel();
         status = new javax.swing.JLabel();
         rate = new javax.swing.JLabel();
-        roomRateInput = new javax.swing.JTextField();
+        roomAdultRateInput = new javax.swing.JTextField();
         roomCapasityInput = new javax.swing.JTextField();
         addRoomBtn = new javax.swing.JToggleButton();
         roomType1 = new javax.swing.JLabel();
         roomNumberInput = new javax.swing.JTextField();
         roomTypeInput = new javax.swing.JComboBox<>();
         roomStatusInput = new javax.swing.JComboBox<>();
+        rate1 = new javax.swing.JLabel();
+        roomChildRateInput = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,9 +67,9 @@ public class AddRoomForm extends javax.swing.JFrame {
 
         status.setText("Status");
 
-        rate.setText("Rate");
+        rate.setText("Adult rate");
 
-        roomRateInput.addActionListener(this::roomRateInputActionPerformed);
+        roomAdultRateInput.addActionListener(this::roomAdultRateInputActionPerformed);
 
         addRoomBtn.setText("Add room");
         addRoomBtn.addActionListener(this::addRoomBtnActionPerformed);
@@ -77,6 +80,10 @@ public class AddRoomForm extends javax.swing.JFrame {
         roomTypeInput.addActionListener(this::roomTypeInputActionPerformed);
 
         roomStatusInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OCCUPIED", "MAINTENANCE", "CLEANING" }));
+
+        rate1.setText("Child rate");
+
+        roomChildRateInput.addActionListener(this::roomChildRateInputActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,19 +97,22 @@ public class AddRoomForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addRoomBtn)
-                        .addGap(1, 1, 1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(addRoomBtn))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(rate1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(roomChildRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(roomType1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                                 .addComponent(roomNumberInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(rate, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rate)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(roomRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(roomAdultRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -115,7 +125,7 @@ public class AddRoomForm extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(roomTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(roomCapasityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(59, 59, 59))
+                .addGap(60, 60, 60))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,78 +151,50 @@ public class AddRoomForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rate)
-                    .addComponent(roomRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
+                    .addComponent(roomAdultRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(roomChildRateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rate1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addRoomBtn)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void addRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomBtnActionPerformed
-    try {
-            String roomNo = roomNumberInput.getText().trim();
-            String type   = roomTypeInput.getSelectedItem().toString();
-            String capStr = roomCapasityInput.getText().trim();
-            String rateStr = roomRateInput.getText().trim();
-            String status = roomStatusInput.getSelectedItem().toString();
+    Integer id = (editingRoom != null) ? editingRoom.getRoomId() : null;
 
-            if (roomNo.isEmpty() || capStr.isEmpty() || rateStr.isEmpty()) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-                return;
-            }
+    hotelmanagement.controller.RoomController.RoomResult result =
+            new hotelmanagement.controller.RoomController().saveRoom(
+                    id,
+                    roomNumberInput.getText(),
+                    roomTypeInput.getSelectedItem().toString(),
+                    roomCapasityInput.getText(),
+                    roomAdultRateInput.getText(),
+                    roomChildRateInput.getText(),
+                    roomStatusInput.getSelectedItem().toString());
 
-            int capacity = Integer.parseInt(capStr);
-            double rateVal = Double.parseDouble(rateStr);
-
-            if (capacity <= 0 || rateVal <= 0) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                        "Capacity and rate must be positive numbers.");
-                return;
-            }
-
-            hotelmanagement.model.Room r = new hotelmanagement.model.Room();
-            r.setRoomNumber(roomNo);
-            r.setRoomType(type);
-            r.setCapacity(capacity);
-            r.setRate(rateVal);
-            r.setStatus(status);
-
-            hotelmanagement.controller.RoomController rc =
-                    new hotelmanagement.controller.RoomController();
-
-            boolean ok;
-            if (editingRoom != null) {
-                r.setRoomId(editingRoom.getRoomId());
-                ok = rc.updateRoom(r);
-            } else {
-                ok = rc.addRoom(r);
-            }
-
-            if (ok) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                        editingRoom != null ? "Room updated." : "Room added.");
-                new RoomForm().setVisible(true);
-                this.dispose();
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                        "Failed. Room number may already exist.");
-            }
-
-        } catch (NumberFormatException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Capacity and rate must be numbers.");
-        }
+    javax.swing.JOptionPane.showMessageDialog(this, result.message);
+    if (result.success) {
+        new RoomForm().setVisible(true);
+        this.dispose();
+    }
     }//GEN-LAST:event_addRoomBtnActionPerformed
 
-    private void roomRateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomRateInputActionPerformed
+    private void roomAdultRateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomAdultRateInputActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_roomRateInputActionPerformed
+    }//GEN-LAST:event_roomAdultRateInputActionPerformed
 
     private void roomTypeInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomTypeInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_roomTypeInputActionPerformed
+
+    private void roomChildRateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomChildRateInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_roomChildRateInputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,10 +225,12 @@ public class AddRoomForm extends javax.swing.JFrame {
     private javax.swing.JToggleButton addRoomBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel rate;
+    private javax.swing.JLabel rate1;
+    private javax.swing.JTextField roomAdultRateInput;
     private javax.swing.JLabel roomCapasity;
     private javax.swing.JTextField roomCapasityInput;
+    private javax.swing.JTextField roomChildRateInput;
     private javax.swing.JTextField roomNumberInput;
-    private javax.swing.JTextField roomRateInput;
     private javax.swing.JComboBox<String> roomStatusInput;
     private javax.swing.JLabel roomType;
     private javax.swing.JLabel roomType1;

@@ -31,9 +31,9 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         email = new javax.swing.JLabel();
         password = new javax.swing.JLabel();
-        passwordInput = new javax.swing.JTextField();
         usernameInput = new javax.swing.JTextField();
         submitBtn = new javax.swing.JButton();
+        passwordInput = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -42,8 +42,6 @@ public class LoginForm extends javax.swing.JFrame {
         email.setText("Username");
 
         password.setText("Password");
-
-        passwordInput.addActionListener(this::passwordInputActionPerformed);
 
         submitBtn.setText("Submit");
         submitBtn.addActionListener(this::submitBtnActionPerformed);
@@ -57,14 +55,12 @@ public class LoginForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(submitBtn)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(passwordInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usernameInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(submitBtn, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(passwordInput, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(usernameInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)))
                 .addGap(91, 91, 91))
             .addGroup(layout.createSequentialGroup()
                 .addGap(151, 151, 151)
@@ -82,8 +78,8 @@ public class LoginForm extends javax.swing.JFrame {
                     .addComponent(usernameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(password))
+                    .addComponent(password)
+                    .addComponent(passwordInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
                 .addComponent(submitBtn)
                 .addContainerGap(61, Short.MAX_VALUE))
@@ -93,25 +89,18 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
-     String user = usernameInput.getText().trim();
-    String pass = passwordInput.getText().trim();
-
     hotelmanagement.model.Staff staff =
-            new hotelmanagement.controller.StaffController().authenticate(user, pass);
+            new hotelmanagement.controller.LoginController().login(
+                    usernameInput.getText(),
+                    new String(passwordInput.getPassword()));
 
     if (staff == null) {
         javax.swing.JOptionPane.showMessageDialog(this, "Invalid credentials.");
         return;
     }
-
-    hotelmanagement.util.Session.setCurrentStaff(staff);
     new DashboardFrame().setVisible(true);
     this.dispose();
     }//GEN-LAST:event_submitBtnActionPerformed
-
-    private void passwordInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordInputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passwordInputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -142,7 +131,7 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JLabel email;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel password;
-    private javax.swing.JTextField passwordInput;
+    private javax.swing.JPasswordField passwordInput;
     private javax.swing.JButton submitBtn;
     private javax.swing.JTextField usernameInput;
     // End of variables declaration//GEN-END:variables

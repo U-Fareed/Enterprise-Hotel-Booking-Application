@@ -14,35 +14,77 @@ public class BookingForm extends javax.swing.JFrame {
 
     private java.util.List<hotelmanagement.model.Guest> guestList;
     private java.util.List<hotelmanagement.model.Room> roomList;
+
     /**
      * Creates new form GuestForm
      */
-    public BookingForm() {
-        initComponents();
-        setLocationRelativeTo(null);
-        loadGuests();
-        loadRooms();
-    }
+public BookingForm() {
+    initComponents();
+    setLocationRelativeTo(null);
+    loadGuests();
+    loadRooms();
 
-        private void loadGuests() {
-        guestBox.removeAllItems();
-        guestList = new hotelmanagement.controller.GuestController().getAllGuests();
-        for (hotelmanagement.model.Guest g : guestList) {
-            guestBox.addItem(g.getGuestId() + " - " + g.getFirstName() + " " + g.getLastName());
+    totalInput.setEditable(false);
+
+    roomBox.addActionListener(e -> recalcTotal());
+    adultSpinner.addChangeListener(e -> recalcTotal());
+    childSpinner.addChangeListener(e -> recalcTotal());
+    checkInInput.addPropertyChangeListener("date", e -> recalcTotal());
+    checkOutInput.addPropertyChangeListener("date", e -> recalcTotal());
+}
+
+private void recalcTotal() {
+    hotelmanagement.model.Room r = currentRoom();
+    int nights = nightsBetween();
+    if (r == null || nights <= 0) {
+        totalInput.setText("");
+        return;
+    }
+    int adults = (Integer) adultSpinner.getValue();
+    int children = (Integer) childSpinner.getValue();
+    double total = new hotelmanagement.controller.BookingController()
+            .calculateTotal(nights, adults, children,
+                            r.getAdultRate(), r.getChildRate());
+    totalInput.setText(String.format("%.2f", total));
+}
+
+private void loadRooms() {
+    roomBox.removeAllItems();
+    roomList = new hotelmanagement.controller.RoomController().getAllRooms();
+    for (hotelmanagement.model.Room r : roomList) {
+        if ("AVAILABLE".equalsIgnoreCase(r.getStatus())) {
+            roomBox.addItem(r.getRoomId() + " - " + r.getRoomNumber()
+                    + " (" + r.getRoomType() + " - Adults Rs." + r.getAdultRate()
+                    + " / Kids Rs." + r.getChildRate() + ")");
         }
     }
+}
 
-    private void loadRooms() {
-        roomBox.removeAllItems();
-        roomList = new hotelmanagement.controller.RoomController().getAllRooms();
-        for (hotelmanagement.model.Room r : roomList) {
-            if ("AVAILABLE".equalsIgnoreCase(r.getStatus())) {
-                roomBox.addItem(r.getRoomId() + " - " + r.getRoomNumber()
-                        + " (" + r.getRoomType() + " - Rs." + r.getRate() + ")");
-            }
-        }
+private void loadGuests() {
+    guestBox.removeAllItems();
+    guestList = new hotelmanagement.controller.GuestController().getAllGuests();
+    for (hotelmanagement.model.Guest g : guestList) {
+        guestBox.addItem(g.getGuestId() + " - " + g.getFirstName() + " " + g.getLastName());
     }
-    
+}
+
+private hotelmanagement.model.Room currentRoom() {
+    if (roomBox.getSelectedIndex() < 0) return null;
+    String sel = roomBox.getSelectedItem().toString();
+    for (hotelmanagement.model.Room r : roomList) {
+        if (sel.startsWith(r.getRoomId() + " - ")) return r;
+    }
+    return null;
+}
+
+private int nightsBetween() {
+    java.util.Date in = checkInInput.getDate();
+    java.util.Date out = checkOutInput.getDate();
+    if (in == null || out == null) return 0;
+    long diff = out.getTime() - in.getTime();
+    long days = diff / (1000L * 60 * 60 * 24);
+    return days > 0 ? (int) days : 0;
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,6 +94,7 @@ public class BookingForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCalendar1 = new com.toedter.calendar.JCalendar();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -59,14 +102,18 @@ public class BookingForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        createBtn = new javax.swing.JButton();
-        checkInInput = new javax.swing.JTextField();
-        checkOutInput = new javax.swing.JTextField();
+        createBookingBtn = new javax.swing.JButton();
         totalInput = new javax.swing.JTextField();
         guestBox = new javax.swing.JComboBox<>();
         roomBox = new javax.swing.JComboBox<>();
         paymentMethodBox = new javax.swing.JComboBox<>();
         backBtn = new javax.swing.JButton();
+        checkInInput = new com.toedter.calendar.JDateChooser();
+        checkOutInput = new com.toedter.calendar.JDateChooser();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        adultSpinner = new javax.swing.JSpinner();
+        childSpinner = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,14 +131,10 @@ public class BookingForm extends javax.swing.JFrame {
 
         jLabel7.setText("Payment method");
 
-        createBtn.setText("Create Booking");
-        createBtn.addActionListener(this::createBtnActionPerformed);
+        createBookingBtn.setText("Create Booking");
+        createBookingBtn.addActionListener(this::createBookingBtnActionPerformed);
 
-        checkInInput.setText("jTextField1");
-
-        checkOutInput.setText("jTextField1");
-
-        totalInput.setText("jTextField1");
+        totalInput.setEditable(false);
 
         roomBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
@@ -100,39 +143,56 @@ public class BookingForm extends javax.swing.JFrame {
         backBtn.setText("Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
 
+        jLabel8.setText("Adults");
+
+        jLabel9.setText("Children");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(checkInInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(guestBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(checkOutInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(totalInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(roomBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(paymentMethodBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(backBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(createBtn)))
-                .addGap(83, 83, 83))
             .addGroup(layout.createSequentialGroup()
                 .addGap(147, 147, 147)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(checkInInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(guestBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(roomBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 91, Short.MAX_VALUE)
+                        .addComponent(backBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(createBookingBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(checkOutInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(childSpinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                                .addComponent(adultSpinner, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(totalInput, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(paymentMethodBox, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(70, 70, 70))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,26 +208,34 @@ public class BookingForm extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(roomBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(checkInInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(checkOutInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(adultSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(childSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(totalInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(paymentMethodBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                    .addComponent(paymentMethodBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(createBtn)
+                    .addComponent(createBookingBtn)
                     .addComponent(backBtn))
-                .addGap(47, 47, 47))
+                .addGap(27, 27, 27))
         );
 
         pack();
@@ -178,52 +246,33 @@ public class BookingForm extends javax.swing.JFrame {
     this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
-    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
+    private void createBookingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBookingBtnActionPerformed
     if (guestBox.getSelectedIndex() < 0 || roomBox.getSelectedIndex() < 0) {
         javax.swing.JOptionPane.showMessageDialog(this, "Select a guest and a room.");
         return;
     }
-
-    String in = checkInInput.getText().trim();
-    String out = checkOutInput.getText().trim();
-    String totalStr = totalInput.getText().trim();
-
-    if (in.isEmpty() || out.isEmpty() || totalStr.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Fill all fields.");
+    hotelmanagement.model.Room room = currentRoom();
+    if (room == null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Invalid room.");
         return;
     }
-
-    double total;
-    try {
-        total = Double.parseDouble(totalStr);
-    } catch (NumberFormatException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Total must be a number.");
-        return;
-    }
-
     int guestId = guestList.get(guestBox.getSelectedIndex()).getGuestId();
-    int roomId = -1;
-    String sel = roomBox.getSelectedItem().toString();
-    for (hotelmanagement.model.Room r : roomList) {
-        if (sel.startsWith(r.getRoomId() + " - ")) { roomId = r.getRoomId(); break; }
-    }
-
+    int adults   = (Integer) adultSpinner.getValue();
+    int children = (Integer) childSpinner.getValue();
     String payment = paymentMethodBox.getSelectedItem().toString();
 
-    try {
-        int id = new hotelmanagement.controller.BookingController()
-                .createBooking(guestId, roomId, in, out, payment, total);
-        if (id > 0) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Booking created (ID " + id + ")");
-            new DashboardFrame().setVisible(true);
-            this.dispose();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Failed.");
-        }
-    } catch (hotelmanagement.exception.RoomNotAvailableException ex) {
-        javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage());
+    hotelmanagement.controller.BookingController.BookingResult result =
+            new hotelmanagement.controller.BookingController().bookRoom(
+                    guestId, room.getRoomId(),
+                    checkInInput.getDate(), checkOutInput.getDate(),
+                    adults, children, payment);
+
+    javax.swing.JOptionPane.showMessageDialog(this, result.message);
+    if (result.success) {
+        new DashboardFrame().setVisible(true);
+        this.dispose();
     }
-    }//GEN-LAST:event_createBtnActionPerformed
+    }//GEN-LAST:event_createBookingBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,11 +300,14 @@ public class BookingForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner adultSpinner;
     private javax.swing.JButton backBtn;
-    private javax.swing.JTextField checkInInput;
-    private javax.swing.JTextField checkOutInput;
-    private javax.swing.JButton createBtn;
+    private com.toedter.calendar.JDateChooser checkInInput;
+    private com.toedter.calendar.JDateChooser checkOutInput;
+    private javax.swing.JSpinner childSpinner;
+    private javax.swing.JButton createBookingBtn;
     private javax.swing.JComboBox<String> guestBox;
+    private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -263,6 +315,8 @@ public class BookingForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JComboBox<String> paymentMethodBox;
     private javax.swing.JComboBox<String> roomBox;
     private javax.swing.JTextField totalInput;

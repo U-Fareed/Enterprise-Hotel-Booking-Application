@@ -42,9 +42,10 @@ public class GuestForm extends javax.swing.JFrame {
         phoneNumberInput = new javax.swing.JTextField();
         emailInput = new javax.swing.JTextField();
         nationalityInput = new javax.swing.JTextField();
-        createBookingBtn = new javax.swing.JButton();
+        createGuestBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         addressInput = new javax.swing.JTextArea();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,37 +69,46 @@ public class GuestForm extends javax.swing.JFrame {
 
         emailInput.addActionListener(this::emailInputActionPerformed);
 
-        createBookingBtn.setText("Create Guest");
-        createBookingBtn.addActionListener(this::createBookingBtnActionPerformed);
+        createGuestBtn.setText("Create Guest");
+        createGuestBtn.addActionListener(this::createGuestBtnActionPerformed);
 
         addressInput.setColumns(20);
         addressInput.setRows(5);
         jScrollPane1.setViewportView(addressInput);
+
+        backBtn.setText("Back");
+        backBtn.addActionListener(this::backBtnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nic, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(phoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nationality, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(emailInput, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                    .addComponent(phoneNumberInput)
-                    .addComponent(nicInput)
-                    .addComponent(lastNameInput)
-                    .addComponent(firstNameInput)
-                    .addComponent(createBookingBtn, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(nationalityInput)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nic, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(phoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nationality, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(emailInput, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                            .addComponent(phoneNumberInput)
+                            .addComponent(nicInput)
+                            .addComponent(lastNameInput)
+                            .addComponent(firstNameInput)
+                            .addComponent(nationalityInput)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(createGuestBtn)))
                 .addGap(97, 97, 97))
             .addGroup(layout.createSequentialGroup()
                 .addGap(180, 180, 180)
@@ -141,37 +151,32 @@ public class GuestForm extends javax.swing.JFrame {
                     .addComponent(nationalityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nationality))
                 .addGap(18, 18, 18)
-                .addComponent(createBookingBtn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(createGuestBtn)
+                    .addComponent(backBtn))
                 .addGap(48, 48, 48))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void createBookingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBookingBtnActionPerformed
-    hotelmanagement.model.Guest g = new hotelmanagement.model.Guest();
-    g.setFirstName(firstNameInput.getText().trim());
-    g.setLastName(lastNameInput.getText().trim());
-    g.setNic(nicInput.getText().trim());
-    g.setPhone(phoneNumberInput.getText().trim());
-    g.setEmail(emailInput.getText().trim());
-    g.setAddress(addressInput.getText().trim());
-    g.setNationality(nationalityInput.getText().trim());
+    private void createGuestBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createGuestBtnActionPerformed
+    hotelmanagement.controller.GuestController.GuestResult result =
+            new hotelmanagement.controller.GuestController().saveGuest(
+                    firstNameInput.getText(),
+                    lastNameInput.getText(),
+                    nicInput.getText(),
+                    phoneNumberInput.getText(),
+                    emailInput.getText(),
+                    addressInput.getText(),
+                    nationalityInput.getText());
 
-    if (g.getFirstName().isEmpty() || g.getLastName().isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "First and last name required.");
-        return;
-    }
-
-    int id = new hotelmanagement.controller.GuestController().addGuest(g);
-    if (id > 0) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Guest saved (ID " + id + ")");
+    javax.swing.JOptionPane.showMessageDialog(this, result.message);
+    if (result.success) {
         new BookingForm().setVisible(true);
         this.dispose();
-    } else {
-        javax.swing.JOptionPane.showMessageDialog(this, "Failed to save guest.");
     }
-    }//GEN-LAST:event_createBookingBtnActionPerformed
+    }//GEN-LAST:event_createGuestBtnActionPerformed
 
     private void lastNameInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameInputActionPerformed
         // TODO add your handling code here:
@@ -180,6 +185,11 @@ public class GuestForm extends javax.swing.JFrame {
     private void emailInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_emailInputActionPerformed
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    new DashboardFrame().setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_backBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,7 +219,8 @@ public class GuestForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
     private javax.swing.JTextArea addressInput;
-    private javax.swing.JButton createBookingBtn;
+    private javax.swing.JButton backBtn;
+    private javax.swing.JButton createGuestBtn;
     private javax.swing.JLabel email;
     private javax.swing.JTextField emailInput;
     private javax.swing.JLabel firstName;

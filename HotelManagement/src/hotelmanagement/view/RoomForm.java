@@ -21,6 +21,18 @@ public class RoomForm extends javax.swing.JFrame {
         loadRooms();
     }
     
+    private void loadRooms() {
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) roomOverview.getModel();
+    model.setRowCount(0);
+    for (hotelmanagement.model.Room r :
+            new hotelmanagement.controller.RoomController().getAllRooms()) {
+        model.addRow(new Object[]{
+            r.getRoomNumber(), r.getCapacity(), r.getRoomType(),
+            r.getStatus(), r.getAdultRate()
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,13 +60,13 @@ public class RoomForm extends javax.swing.JFrame {
 
         roomOverview.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Room number", "Room capasity", "Room type", "Room status", "Rate"
+                "Room number", "Room capasity", "Room type", "Room status", "Adult Rate", "Child Rate"
             }
         ));
         jScrollPane1.setViewportView(roomOverview);
@@ -113,36 +125,23 @@ public class RoomForm extends javax.swing.JFrame {
     }//GEN-LAST:event_addRoomBtnActionPerformed
 
     private void deleteRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRoomBtnActionPerformed
- int row = roomOverview.getSelectedRow();
-        if (row == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Select a room first.");
-            return;
-        }
+    int row = roomOverview.getSelectedRow();
+    if (row == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Select a room first.");
+        return;
+    }
+    String roomNumber = roomOverview.getValueAt(row, 0).toString();
+    int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "Delete room " + roomNumber + "?", "Confirm",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+    if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
 
-        String roomNumber = roomOverview.getValueAt(row, 0).toString();
+    boolean ok = new hotelmanagement.controller.RoomController()
+            .deleteByNumber(roomNumber);
 
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
-                "Delete room " + roomNumber + "?", "Confirm",
-                javax.swing.JOptionPane.YES_NO_OPTION);
-        if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
-
-        hotelmanagement.controller.RoomController rc =
-                new hotelmanagement.controller.RoomController();
-        hotelmanagement.model.Room r = rc.getRoomByNumber(roomNumber);
-
-        if (r == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Room not found.");
-            return;
-        }
-
-        boolean ok = rc.deleteRoom(r.getRoomId());
-        if (ok) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Room deleted.");
-            loadRooms();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Cannot delete — this room may have bookings.");
-        }
+    javax.swing.JOptionPane.showMessageDialog(this,
+            ok ? "Room deleted." : "Cannot delete — this room may have bookings.");
+    if (ok) loadRooms();
     }//GEN-LAST:event_deleteRoomBtnActionPerformed
 
     private void updateRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateRoomBtnActionPerformed
@@ -196,20 +195,6 @@ public class RoomForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new RoomForm().setVisible(true));
     }
-    
-    private void loadRooms() {
-    javax.swing.table.DefaultTableModel model =
-        (javax.swing.table.DefaultTableModel) roomOverview.getModel();
-    model.setRowCount(0);
-    for (hotelmanagement.model.Room r :
-            new hotelmanagement.controller.RoomController().getAllRooms()) {
-        model.addRow(new Object[]{
-            r.getRoomNumber(), r.getCapacity(), r.getRoomType(),
-            r.getStatus(), r.getRate()
-        });
-    }
-}
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addRoomBtn;
     private javax.swing.JButton backBtn;

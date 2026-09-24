@@ -47,4 +47,35 @@ public class GuestController {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
+        
+    public static class GuestResult {
+    public final boolean success;
+    public final String message;
+    public final int guestId;
+    public GuestResult(boolean success, String message, int guestId) {
+        this.success = success; this.message = message; this.guestId = guestId;
+    }
+}
+
+public GuestResult saveGuest(String firstName, String lastName, String nic,
+                             String phone, String email, String address,
+                             String nationality) {
+    if (firstName == null || firstName.trim().isEmpty() ||
+        lastName == null || lastName.trim().isEmpty())
+        return new GuestResult(false, "First and last name required.", -1);
+
+    Guest g = new Guest();
+    g.setFirstName(firstName.trim());
+    g.setLastName(lastName.trim());
+    g.setNic(nic == null ? "" : nic.trim());
+    g.setPhone(phone == null ? "" : phone.trim());
+    g.setEmail(email == null ? "" : email.trim());
+    g.setAddress(address == null ? "" : address.trim());
+    g.setNationality(nationality == null ? "" : nationality.trim());
+
+    int id = addGuest(g);
+    return id > 0
+        ? new GuestResult(true, "Guest saved (ID " + id + ")", id)
+        : new GuestResult(false, "Failed to save guest.", -1);
+}
 }
