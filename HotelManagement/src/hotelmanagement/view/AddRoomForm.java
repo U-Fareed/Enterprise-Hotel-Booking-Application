@@ -16,7 +16,10 @@ public void loadRoomForEdit(hotelmanagement.model.Room r) {
     this.editingRoom = r;
     roomNumberInput.setText(r.getRoomNumber());
     roomTypeInput.setSelectedItem(r.getRoomType());
-    roomCapasityInput.setText(String.valueOf(r.getCapacity()));
+    String t = r.getRoomType();
+    if (t.equals("Standard") || t.equals("Deluxe") || t.equals("Suite")) {
+        roomTypeInput.setSelectedItem(t);
+    }
     roomAdultRateInput.setText(String.valueOf(r.getAdultRate()));
     roomChildRateInput.setText(String.valueOf(r.getChildRate()));
     roomStatusInput.setSelectedItem(r.getStatus());

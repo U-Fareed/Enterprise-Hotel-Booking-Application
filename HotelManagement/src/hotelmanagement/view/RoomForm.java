@@ -29,10 +29,11 @@ public class RoomForm extends javax.swing.JFrame {
             new hotelmanagement.controller.RoomController().getAllRooms()) {
         model.addRow(new Object[]{
             r.getRoomNumber(), r.getCapacity(), r.getRoomType(),
-            r.getStatus(), r.getAdultRate()
+            r.getStatus(), r.getAdultRate(), r.getChildRate()
         });
     }
 }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.

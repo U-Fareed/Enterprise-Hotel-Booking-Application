@@ -90,6 +90,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         jMenu3.add(staff);
 
         payments.setText("Payments");
+        payments.addActionListener(this::paymentsActionPerformed);
         jMenu3.add(payments);
 
         jMenuItem1.setText("Check-In/Out");
@@ -162,6 +163,11 @@ public class DashboardFrame extends javax.swing.JFrame {
         new CheckInOutForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void paymentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentsActionPerformed
+    new PaymentForm().setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_paymentsActionPerformed
 
     /**
      * @param args the command line arguments
