@@ -8,10 +8,10 @@ public class DBConnection {
     private static DBConnection instance;
     private Connection connection;
 
-    //private static final String URL = "jdbc:mysql://localhost:3306/grandstay";
-    private static final String URL = "jdbc:mysql://localhost:3306/hotelmanagement";
+    private static final String URL = "jdbc:mysql://localhost:3306/grandstay";
+    //private static final String URL = "jdbc:mysql://localhost:3306/hotelmanagement";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "root";
 
     private DBConnection() {
         try {

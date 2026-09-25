@@ -32,8 +32,7 @@ private void applyRbac() {
         staff.setVisible(false);
     }
     if (!"ADMIN".equals(role) && !"MANAGER".equals(role)) {
-        revanue.setVisible(false);
-        revanueDisplay.setVisible(false);
+        revenueDisplay.setVisible(false);
     }
 
     setTitle("Dashboard - " + current.getFullName() + " (" + role + ")");
@@ -43,23 +42,42 @@ private void loadDashboard() {
     hotelmanagement.controller.BookingController bc =
             new hotelmanagement.controller.BookingController();
 
-    java.util.List<String> arrivals   = bc.getUpcomingArrivals();
-    java.util.List<String> departures = bc.getRecentDepartures();
+    double revenue = bc.getTotalRevenue();
+    revenueDisplay.setText("Rs. " + String.format("%,.2f", revenue));
 
-    javax.swing.table.DefaultTableModel model =
-            (javax.swing.table.DefaultTableModel) dashboardTable.getModel();
-    model.setRowCount(0);
-    int rows = Math.max(arrivals.size(), departures.size());
-    for (int i = 0; i < rows; i++) {
-        model.addRow(new Object[]{
-            i < arrivals.size()   ? arrivals.get(i)   : "",
-            i < departures.size() ? departures.get(i) : "",
-            ""
-        });
-    }
+    int arrivalsCount = 0;
+    try {
+        java.util.List<String> arrivals = bc.getUpcomingArrivals();
+        if (arrivals != null) arrivalsCount = arrivals.size();
+    } catch (Exception e) { e.printStackTrace(); }
+    arrivalsDisplay.setText(String.valueOf(arrivalsCount));
 
-    revanueDisplay.setText("Rs. " + bc.getTotalRevenue());
-    revanueDisplay.setEditable(false);
+    int[] occ = getOccupancy();
+    occupanyDisplay.setText(occ[0] + " / " + occ[1]);
+
+    pendingDisplay.setText(String.valueOf(getPendingPaymentsCount()));
+}
+
+private int[] getOccupancy() {
+    int occupied = 0, total = 0;
+    try (java.sql.Connection c = hotelmanagement.util.DBConnection.getInstance().getConnection();
+         java.sql.Statement s = c.createStatement()) {
+        java.sql.ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM rooms");
+        if (rs.next()) total = rs.getInt(1);
+        rs = s.executeQuery("SELECT COUNT(*) FROM rooms WHERE UPPER(status)='OCCUPIED'");
+        if (rs.next()) occupied = rs.getInt(1);
+    } catch (Exception e) { e.printStackTrace(); }
+    return new int[]{occupied, total};
+}
+
+private int getPendingPaymentsCount() {
+    String sql = "SELECT COUNT(*) FROM bookings WHERE UPPER(payment_status) IN ('UNPAID','PENDING','PARTIAL')";
+    try (java.sql.Connection c = hotelmanagement.util.DBConnection.getInstance().getConnection();
+         java.sql.PreparedStatement ps = c.prepareStatement(sql);
+         java.sql.ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt(1);
+    } catch (Exception e) { e.printStackTrace(); }
+    return 0;
 }
 
     /**
@@ -74,10 +92,19 @@ private void loadDashboard() {
         jMenu1 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         dashboard = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        dashboardTable = new javax.swing.JTable();
-        revanue = new javax.swing.JLabel();
-        revanueDisplay = new javax.swing.JTextField();
+        logoutBtn = new javax.swing.JButton();
+        occupancyCard = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        occupanyDisplay = new javax.swing.JTextField();
+        arrivalsCard = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        arrivalsDisplay = new javax.swing.JTextField();
+        revenueCard = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        revenueDisplay = new javax.swing.JTextField();
+        pendingCard = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        pendingDisplay = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
@@ -87,6 +114,7 @@ private void loadDashboard() {
         staff = new javax.swing.JMenuItem();
         payments = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -96,26 +124,129 @@ private void loadDashboard() {
 
         dashboard.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         dashboard.setForeground(new java.awt.Color(255, 255, 255));
-        dashboard.setText("Dashbaord");
+        dashboard.setText("Dashboard");
 
-        dashboardTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Arrivals", "Depatures", "RoomStatus"
-            }
-        ));
-        jScrollPane1.setViewportView(dashboardTable);
+        logoutBtn.setText("Logout");
+        logoutBtn.addActionListener(this::logoutBtnActionPerformed);
 
-        revanue.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        revanue.setForeground(new java.awt.Color(255, 255, 255));
-        revanue.setText("Revenue");
+        jLabel2.setText("Occupancy");
 
-        revanueDisplay.addActionListener(this::revanueDisplayActionPerformed);
+        occupanyDisplay.setEditable(false);
+        occupanyDisplay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        occupanyDisplay.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        occupanyDisplay.setBorder(null);
+
+        javax.swing.GroupLayout occupancyCardLayout = new javax.swing.GroupLayout(occupancyCard);
+        occupancyCard.setLayout(occupancyCardLayout);
+        occupancyCardLayout.setHorizontalGroup(
+            occupancyCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(occupancyCardLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(occupancyCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(occupanyDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        occupancyCardLayout.setVerticalGroup(
+            occupancyCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(occupancyCardLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(occupanyDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                .addGap(11, 11, 11))
+        );
+
+        jLabel3.setText("Arrivals");
+
+        arrivalsDisplay.setEditable(false);
+        arrivalsDisplay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        arrivalsDisplay.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        arrivalsDisplay.setBorder(null);
+
+        javax.swing.GroupLayout arrivalsCardLayout = new javax.swing.GroupLayout(arrivalsCard);
+        arrivalsCard.setLayout(arrivalsCardLayout);
+        arrivalsCardLayout.setHorizontalGroup(
+            arrivalsCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, arrivalsCardLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(26, 26, 26))
+            .addGroup(arrivalsCardLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(arrivalsDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        arrivalsCardLayout.setVerticalGroup(
+            arrivalsCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(arrivalsCardLayout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(arrivalsDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                .addGap(16, 16, 16))
+        );
+
+        jLabel1.setText("Revenue");
+
+        revenueDisplay.setEditable(false);
+        revenueDisplay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        revenueDisplay.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        revenueDisplay.setBorder(null);
+
+        javax.swing.GroupLayout revenueCardLayout = new javax.swing.GroupLayout(revenueCard);
+        revenueCard.setLayout(revenueCardLayout);
+        revenueCardLayout.setHorizontalGroup(
+            revenueCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(revenueCardLayout.createSequentialGroup()
+                .addGroup(revenueCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(revenueCardLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel1))
+                    .addGroup(revenueCardLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(revenueDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        revenueCardLayout.setVerticalGroup(
+            revenueCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(revenueCardLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(revenueDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                .addGap(12, 12, 12))
+        );
+
+        jLabel4.setText("Pending");
+
+        pendingDisplay.setEditable(false);
+        pendingDisplay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        pendingDisplay.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        pendingDisplay.setBorder(null);
+
+        javax.swing.GroupLayout pendingCardLayout = new javax.swing.GroupLayout(pendingCard);
+        pendingCard.setLayout(pendingCardLayout);
+        pendingCardLayout.setHorizontalGroup(
+            pendingCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pendingCardLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(26, 26, 26))
+            .addGroup(pendingCardLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(pendingDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        pendingCardLayout.setVerticalGroup(
+            pendingCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pendingCardLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pendingDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                .addGap(17, 17, 17))
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -123,15 +254,20 @@ private void loadDashboard() {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(revenueCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addComponent(occupancyCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46)
+                        .addComponent(arrivalsCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(pendingCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(revanue, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(revanueDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 513, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                        .addComponent(logoutBtn)))
+                .addGap(16, 16, 16))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,11 +275,14 @@ private void loadDashboard() {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dashboard)
-                    .addComponent(revanue)
-                    .addComponent(revanueDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(logoutBtn))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(occupancyCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(arrivalsCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(revenueCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pendingCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(220, Short.MAX_VALUE))
         );
 
         jMenu2.setText("Home");
@@ -175,6 +314,10 @@ private void loadDashboard() {
         jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
         jMenu3.add(jMenuItem1);
 
+        jMenuItem2.setText("View Booking report");
+        jMenuItem2.addActionListener(this::jMenuItem2ActionPerformed);
+        jMenu3.add(jMenuItem2);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -197,10 +340,6 @@ private void loadDashboard() {
         new BookingForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_bookingActionPerformed
-
-    private void revanueDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_revanueDisplayActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_revanueDisplayActionPerformed
 
     private void roomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomsActionPerformed
         new RoomForm().setVisible(true);
@@ -226,6 +365,19 @@ private void loadDashboard() {
     new PaymentForm().setVisible(true);
     this.dispose();
     }//GEN-LAST:event_paymentsActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+hotelmanagement.util.ReportUtil.showReport("/jasperReports/booking_report.jrxml");    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+    int c = javax.swing.JOptionPane.showConfirmDialog(this, "Log out?", "Confirm",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+    if (c == javax.swing.JOptionPane.YES_OPTION) {
+        hotelmanagement.util.Session.logout();
+        dispose();
+        new LoginForm().setVisible(true);
+    }
+    }//GEN-LAST:event_logoutBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -253,20 +405,30 @@ private void loadDashboard() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel arrivalsCard;
+    private javax.swing.JTextField arrivalsDisplay;
     private javax.swing.JMenuItem booking;
     private javax.swing.JLabel dashboard;
-    private javax.swing.JTable dashboardTable;
     private javax.swing.JMenuItem guests;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton logoutBtn;
+    private javax.swing.JPanel occupancyCard;
+    private javax.swing.JTextField occupanyDisplay;
     private javax.swing.JMenuItem payments;
-    private javax.swing.JLabel revanue;
-    private javax.swing.JTextField revanueDisplay;
+    private javax.swing.JPanel pendingCard;
+    private javax.swing.JTextField pendingDisplay;
+    private javax.swing.JPanel revenueCard;
+    private javax.swing.JTextField revenueDisplay;
     private javax.swing.JMenuItem rooms;
     private javax.swing.JMenuItem staff;
     // End of variables declaration//GEN-END:variables
