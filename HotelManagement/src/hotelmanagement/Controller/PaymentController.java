@@ -130,5 +130,31 @@ public class PaymentController {
             this.paymentId = paymentId;
         }
     }
+    
+    public Object[] getBookingDetails(int bookingId) {
+    String sql = "SELECT g.first_name, g.last_name, r.room_number, r.room_type, " +
+                 "b.check_in_date, b.check_out_date, b.total_amount " +
+                 "FROM bookings b " +
+                 "JOIN guests g ON b.guest_id = g.guest_id " +
+                 "JOIN rooms  r ON b.room_id  = r.room_id " +
+                 "WHERE b.booking_id = ?";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, bookingId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return new Object[]{
+                    rs.getString("first_name") + " " + rs.getString("last_name"),
+                    rs.getString("room_number"),
+                    rs.getString("room_type"),
+                    rs.getString("check_in_date"),
+                    rs.getString("check_out_date"),
+                    rs.getDouble("total_amount")
+                };
+            }
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return null;
+    }
 
 }

@@ -151,22 +151,18 @@ private void loadBookings() {
     }//GEN-LAST:event_checkinBtnActionPerformed
 
     private void checkoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutBtnActionPerformed
-int row = checkinTable.getSelectedRow();
+
+    int row = checkinTable.getSelectedRow();
     if (row == -1) {
         javax.swing.JOptionPane.showMessageDialog(this, "Select a booking first.");
         return;
     }
-
     int bookingId = (int) checkinTable.getValueAt(row, 0);
-    boolean ok = new hotelmanagement.controller.BookingController()
-            .updateBookingStatus(bookingId, "CHECKED_OUT");
+    
+    PaymentForm pf = new PaymentForm(bookingId, true);
+    pf.setVisible(true);
+    this.dispose();
 
-    if (ok) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Checked out.");
-        loadBookings();
-    } else {
-        javax.swing.JOptionPane.showMessageDialog(this, "Failed.");
-    }
     }//GEN-LAST:event_checkoutBtnActionPerformed
 
     private void closeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBtnActionPerformed

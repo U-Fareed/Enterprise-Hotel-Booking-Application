@@ -18,6 +18,56 @@ public class PaymentForm extends javax.swing.JFrame {
     public PaymentForm() {
         initComponents();
     }
+    
+    public PaymentForm(int bookingId, boolean checkoutFlow) {
+    this.bookingId = bookingId;
+    this.isCheckoutFlow = checkoutFlow;
+    initComponents();
+    setLocationRelativeTo(null);
+
+    methodBox.removeAllItems();
+    methodBox.addItem("CASH");
+    methodBox.addItem("CARD");
+    methodBox.addItem("ONLINE");
+
+    loadBookingDetails();
+    loadPayments();
+    }
+    
+    private void loadBookingDetails() {
+    if (bookingId <= 0) return;
+    Object[] row = new hotelmanagement.Controller.PaymentController()
+            .getBookingDetails(bookingId);
+    if (row == null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Booking not found.");
+        return;
+    }
+    txtGuest.setText(String.valueOf(row[0]));
+    txtRoom.setText(row[1] + " (" + row[2] + ")");
+    txtCheckIn.setText(String.valueOf(row[3]));
+    txtCheckOut.setText(String.valueOf(row[4]));
+    double total = (Double) row[5];
+    txtTotal.setText("Rs. " + String.format("%.2f", total));
+    amountInput.setText(String.format("%.2f", total));
+    }
+
+    private void loadPayments() {
+    if (bookingId <= 0) return;
+    javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) paymentsTable.getModel();
+    model.setRowCount(0);
+    for (hotelmanagement.model.Payment p :
+            new hotelmanagement.Controller.PaymentController()
+                    .getPaymentsForBooking(bookingId)) {
+        model.addRow(new Object[]{
+            p.getPaymentId(),
+            p.getAmount(),
+            p.getMethod(),
+            p.getReference(),
+            p.getPaidAt()
+        });
+    }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,27 +79,213 @@ public class PaymentForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lblGuestKey = new javax.swing.JLabel();
+        lblRoomKey = new javax.swing.JLabel();
+        lblCheckInKey = new javax.swing.JLabel();
+        lblCheckOutKey = new javax.swing.JLabel();
+        lblTotalKey = new javax.swing.JLabel();
+        txtGuest = new javax.swing.JTextField();
+        txtRoom = new javax.swing.JTextField();
+        txtCheckIn = new javax.swing.JTextField();
+        txtCheckOut = new javax.swing.JTextField();
+        txtTotal = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        amountInput = new javax.swing.JTextField();
+        lblMethod = new javax.swing.JLabel();
+        lblReference = new javax.swing.JLabel();
+        lblAmount = new javax.swing.JLabel();
+        methodBox = new javax.swing.JComboBox<>();
+        referenceInput = new javax.swing.JTextField();
+        backBtn = new javax.swing.JButton();
+        payBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 153));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Process Payment");
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblGuestKey.setText("Guest :");
+
+        lblRoomKey.setText("Room :");
+
+        lblCheckInKey.setText("Check-in :");
+
+        lblCheckOutKey.setText("Check-out :");
+
+        lblTotalKey.setText("Total due :");
+
+        txtGuest.addActionListener(this::txtGuestActionPerformed);
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel2.setText("Booking Summary");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblTotalKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblCheckOutKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblCheckInKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblRoomKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblGuestKey))
+                        .addGap(57, 57, 57)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtGuest, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtRoom, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCheckIn, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCheckOut, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTotal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblGuestKey)
+                    .addComponent(txtGuest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblRoomKey)
+                    .addComponent(txtRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCheckInKey)
+                    .addComponent(txtCheckIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCheckOutKey)
+                    .addComponent(txtCheckOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTotalKey)
+                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(201, 201, 201))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        amountInput.addActionListener(this::amountInputActionPerformed);
+
+        lblMethod.setText("Method :");
+
+        lblReference.setText("Reference :");
+
+        lblAmount.setText("Amount :");
+
+        methodBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        methodBox.addActionListener(this::methodBoxActionPerformed);
+
+        referenceInput.setToolTipText("Card / Online txn ID");
+        referenceInput.addActionListener(this::referenceInputActionPerformed);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(lblMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(methodBox, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblReference, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(amountInput)
+                            .addComponent(referenceInput, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(47, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblMethod)
+                    .addComponent(methodBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblReference)
+                    .addComponent(referenceInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAmount)
+                    .addComponent(amountInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(44, 44, 44))
+        );
+
+        backBtn.setText("Back");
+        backBtn.addActionListener(this::backBtnActionPerformed);
+
+        payBtn.setText("Pay");
+        payBtn.addActionListener(this::payBtnActionPerformed);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(104, 104, 104)
+                                .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(payBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(backBtn)
+                            .addComponent(payBtn))))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -58,6 +294,64 @@ public class PaymentForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void referenceInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_referenceInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_referenceInputActionPerformed
+
+    private void amountInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_amountInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_amountInputActionPerformed
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        if (isCheckoutFlow) {
+        new CheckInOutForm().setVisible(true);
+    } else {
+        new DashboardFrame().setVisible(true);
+    }
+    this.dispose();
+    }//GEN-LAST:event_backBtnActionPerformed
+
+    private void methodBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_methodBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_methodBoxActionPerformed
+
+    private void payBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payBtnActionPerformed
+        // TODO add your handling code here:
+        double amount;
+    try {
+        amount = Double.parseDouble(amountInput.getText().trim());
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Invalid amount.");
+        return;
+    }
+
+    String method = methodBox.getSelectedItem().toString();
+    String reference = referenceInput.getText().trim();
+
+    hotelmanagement.Controller.PaymentController.PaymentResult result =
+            new hotelmanagement.Controller.PaymentController()
+                    .processPayment(bookingId, amount, method, reference);
+
+    javax.swing.JOptionPane.showMessageDialog(this, result.message);
+
+    if (!result.success) return;
+
+    if (isCheckoutFlow) {
+        new hotelmanagement.controller.BookingController()
+                .updateBookingStatus(bookingId, "CHECKED_OUT");
+        javax.swing.JOptionPane.showMessageDialog(this, "Checkout complete.");
+        new DashboardFrame().setVisible(true);
+        this.dispose();
+    } else {
+        loadPayments();
+    }
+    }//GEN-LAST:event_payBtnActionPerformed
+
+    private void txtGuestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGuestActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtGuestActionPerformed
 
     /**
      * @param args the command line arguments
@@ -83,8 +377,33 @@ public class PaymentForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new PaymentForm().setVisible(true));
     }
-
+    
+    private int preselectedBookingId = -1;
+    private int bookingId;
+    private boolean isCheckoutFlow;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField amountInput;
+    private javax.swing.JButton backBtn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblAmount;
+    private javax.swing.JLabel lblCheckInKey;
+    private javax.swing.JLabel lblCheckOutKey;
+    private javax.swing.JLabel lblGuestKey;
+    private javax.swing.JLabel lblMethod;
+    private javax.swing.JLabel lblReference;
+    private javax.swing.JLabel lblRoomKey;
+    private javax.swing.JLabel lblTotalKey;
+    private javax.swing.JComboBox<String> methodBox;
+    private javax.swing.JButton payBtn;
+    private javax.swing.JTextField referenceInput;
+    private javax.swing.JTextField txtCheckIn;
+    private javax.swing.JTextField txtCheckOut;
+    private javax.swing.JTextField txtGuest;
+    private javax.swing.JTextField txtRoom;
+    private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 }
