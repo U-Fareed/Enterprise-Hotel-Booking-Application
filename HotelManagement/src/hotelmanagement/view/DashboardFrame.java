@@ -19,6 +19,7 @@ public DashboardFrame() {
     initComponents();
     applyRbac();
     loadDashboard();
+    startClock();
 }
 
 private void applyRbac() {
@@ -38,10 +39,47 @@ private void applyRbac() {
     setTitle("Dashboard - " + current.getFullName() + " (" + role + ")");
 }
 
+private void loadArrivalsTable() {
+    javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+        new Object[]{"Guest", "Room", "Check-in", "Status"}, 0);
+    arrivalsTable.setModel(model);
+
+    String sql =
+        "SELECT CONCAT(g.first_name, ' ', g.last_name) AS guest, " +
+        "       r.room_number AS room, " +
+        "       b.check_in_date AS checkin, " +
+        "       b.status AS status " +
+        "FROM bookings b " +
+        "JOIN guests g ON g.guest_id = b.guest_id " +
+        "JOIN rooms  r ON r.room_id  = b.room_id " +
+        "WHERE DATE(b.check_in_date) = CURDATE() " +
+        "ORDER BY r.room_number";
+
+    try (java.sql.Connection c = hotelmanagement.util.DBConnection.getInstance().getConnection();
+         java.sql.PreparedStatement ps = c.prepareStatement(sql);
+         java.sql.ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getString("guest"),
+                rs.getString("room"),
+                rs.getDate("checkin"),
+                rs.getString("status")
+            });
+        }
+    } catch (Exception e) { e.printStackTrace(); }
+
+    // Style
+    arrivalsTable.setRowHeight(24);
+    arrivalsTable.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
+    arrivalsTable.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+    arrivalsTable.setShowVerticalLines(false);
+}
+
 private void loadDashboard() {
     hotelmanagement.controller.BookingController bc =
             new hotelmanagement.controller.BookingController();
 
+    // Stat cards
     double revenue = bc.getTotalRevenue();
     revenueDisplay.setText("Rs. " + String.format("%,.2f", revenue));
 
@@ -56,6 +94,9 @@ private void loadDashboard() {
     occupanyDisplay.setText(occ[0] + " / " + occ[1]);
 
     pendingDisplay.setText(String.valueOf(getPendingPaymentsCount()));
+
+    // Arrivals table
+    loadArrivalsTable();
 }
 
 private int[] getOccupancy() {
@@ -78,6 +119,16 @@ private int getPendingPaymentsCount() {
         if (rs.next()) return rs.getInt(1);
     } catch (Exception e) { e.printStackTrace(); }
     return 0;
+}
+
+private void startClock() {
+    java.time.format.DateTimeFormatter fmt =
+        java.time.format.DateTimeFormatter.ofPattern("EEE, dd MMM yyyy  HH:mm:ss");
+    javax.swing.Timer timer = new javax.swing.Timer(1000, e ->
+        clockLabel.setText(java.time.LocalDateTime.now().format(fmt))
+    );
+    timer.setInitialDelay(0);
+    timer.start();
 }
 
     /**
@@ -105,6 +156,9 @@ private int getPendingPaymentsCount() {
         pendingCard = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         pendingDisplay = new javax.swing.JTextField();
+        clockLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        arrivalsTable = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
@@ -248,25 +302,49 @@ private int getPendingPaymentsCount() {
                 .addGap(17, 17, 17))
         );
 
+        clockLabel.setForeground(new java.awt.Color(255, 255, 255));
+        clockLabel.setText("jLabel5");
+
+        arrivalsTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Guest", "Room", "Check-in", "Status"
+            }
+        ));
+        jScrollPane1.setViewportView(arrivalsTable);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(revenueCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                        .addComponent(occupancyCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(arrivalsCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(pendingCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(logoutBtn)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(revenueCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                                .addComponent(occupancyCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(arrivalsCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addComponent(pendingCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(clockLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(33, 33, 33)
+                                .addComponent(logoutBtn)))))
                 .addGap(16, 16, 16))
         );
         jPanel1Layout.setVerticalGroup(
@@ -275,14 +353,17 @@ private int getPendingPaymentsCount() {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dashboard)
-                    .addComponent(logoutBtn))
-                .addGap(18, 18, 18)
+                    .addComponent(logoutBtn)
+                    .addComponent(clockLabel))
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(occupancyCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(arrivalsCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(revenueCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pendingCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(220, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jMenu2.setText("Home");
@@ -407,7 +488,9 @@ hotelmanagement.util.ReportUtil.showReport("/jasperReports/booking_report.jrxml"
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel arrivalsCard;
     private javax.swing.JTextField arrivalsDisplay;
+    private javax.swing.JTable arrivalsTable;
     private javax.swing.JMenuItem booking;
+    private javax.swing.JLabel clockLabel;
     private javax.swing.JLabel dashboard;
     private javax.swing.JMenuItem guests;
     private javax.swing.JLabel jLabel1;
@@ -421,6 +504,7 @@ hotelmanagement.util.ReportUtil.showReport("/jasperReports/booking_report.jrxml"
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton logoutBtn;
     private javax.swing.JPanel occupancyCard;
     private javax.swing.JTextField occupanyDisplay;
